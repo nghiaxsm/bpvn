@@ -1,0 +1,367 @@
+---
+interface FilterOption {
+  value: string;
+  label: string;
+}
+
+interface CategoryGroup {
+  label: string;
+  categories: FilterOption[];
+}
+
+interface Props {
+  categoryGroups: CategoryGroup[];
+  brands: FilterOption[];
+}
+
+const { categoryGroups, brands } = Astro.props;
+---
+
+<section class="product-filters" aria-label="Product filters">
+  <div class="product-filters__search">
+    <label class="product-filters__label" for="product-search">Search products</label>
+    <input
+      id="product-search"
+      type="search"
+      placeholder="Search products..."
+      autocomplete="off"
+      data-product-search
+    />
+  </div>
+
+  <details class="filter-dropdown" data-filter-dropdown>
+    <summary>
+      Categories
+      <span class="filter-dropdown__chevron" aria-hidden="true"></span>
+    </summary>
+    <div class="filter-dropdown__panel filter-dropdown__panel--categories">
+      {categoryGroups.map((group) => (
+        <fieldset class="filter-category-group">
+          <legend>{group.label}</legend>
+          {group.categories.map((category) => (
+            <label class="filter-option">
+              <input
+                type="checkbox"
+                value={category.value}
+                data-category-filter
+              />
+              <span>{category.label}</span>
+            </label>
+          ))}
+        </fieldset>
+      ))}
+    </div>
+  </details>
+
+  <details class="filter-dropdown" data-filter-dropdown>
+    <summary>
+      Brands
+      <span class="filter-dropdown__chevron" aria-hidden="true"></span>
+    </summary>
+    <div class="filter-dropdown__panel">
+      {brands.map((brand) => (
+        <label class="filter-option">
+          <input type="checkbox" value={brand.value} data-brand-filter />
+          <span>{brand.label}</span>
+        </label>
+      ))}
+    </div>
+  </details>
+
+  <div class="product-filters__actions">
+    <span class="product-filters__active" data-active-filters aria-live="polite"></span>
+    <button type="button" data-clear-filters>Clear filters</button>
+  </div>
+</section>
+
+<script>
+  const searchInput = document.querySelector<HTMLInputElement>("[data-product-search]");
+  const categoryInputs = Array.from(
+    document.querySelectorAll<HTMLInputElement>("[data-category-filter]"),
+  );
+  const brandInputs = Array.from(
+    document.querySelectorAll<HTMLInputElement>("[data-brand-filter]"),
+  );
+  const clearButton = document.querySelector<HTMLButtonElement>("[data-clear-filters]");
+  const cards = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-product-card]"),
+  );
+  const count = document.querySelector<HTMLElement>("[data-results-count]");
+  const activeFilters = document.querySelector<HTMLElement>("[data-active-filters]");
+  const noResults = document.querySelector<HTMLElement>("[data-no-results]");
+
+  const applyFilters = () => {
+    const searchTerm = searchInput?.value.trim().toLocaleLowerCase() ?? "";
+    const selectedCategories = categoryInputs
+      .filter((input) => input.checked)
+      .map((input) => input.value);
+    const selectedBrands = brandInputs
+      .filter((input) => input.checked)
+      .map((input) => input.value);
+
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
+      const cardCategories = (card.dataset.categories ?? "").split("|");
+      const cardBrand = card.dataset.brand ?? "";
+      const searchableText = card.dataset.search ?? "";
+
+      const matchesSearch = !searchTerm || searchableText.includes(searchTerm);
+      const matchesCategory =
+        selectedCategories.length === 0 ||
+        selectedCategories.some((category) => cardCategories.includes(category));
+      const matchesBrand =
+        selectedBrands.length === 0 || selectedBrands.includes(cardBrand);
+      const isVisible = matchesSearch && matchesCategory && matchesBrand;
+
+      card.hidden = !isVisible;
+      if (isVisible) visibleCount += 1;
+    });
+
+    if (count) count.textContent = `${visibleCount} products`;
+    if (noResults) noResults.hidden = visibleCount !== 0;
+
+    const activeCount =
+      selectedCategories.length + selectedBrands.length + (searchTerm ? 1 : 0);
+    if (activeFilters) {
+      activeFilters.textContent = activeCount ? `${activeCount} selected` : "";
+    }
+
+    document.querySelectorAll<HTMLDetailsElement>("[data-filter-dropdown]").forEach((dropdown) => {
+      const checked = dropdown.querySelectorAll<HTMLInputElement>("input:checked").length;
+      const summary = dropdown.querySelector("summary");
+      if (summary) {
+        summary.setAttribute("data-selected", checked ? String(checked) : "");
+      }
+    });
+  };
+
+  searchInput?.addEventListener("input", applyFilters);
+  [...categoryInputs, ...brandInputs].forEach((input) => {
+    input.addEventListener("change", applyFilters);
+  });
+
+  clearButton?.addEventListener("click", () => {
+    if (searchInput) searchInput.value = "";
+    [...categoryInputs, ...brandInputs].forEach((input) => {
+      input.checked = false;
+    });
+    applyFilters();
+  });
+
+  // Keep only one dropdown open at a time.
+  document.querySelectorAll<HTMLDetailsElement>("[data-filter-dropdown]").forEach((dropdown) => {
+    dropdown.addEventListener("toggle", () => {
+      if (!dropdown.open) return;
+      document.querySelectorAll<HTMLDetailsElement>("[data-filter-dropdown]").forEach((other) => {
+        if (other !== dropdown) other.open = false;
+      });
+    });
+  });
+
+  applyFilters();
+</script>
+
+<style>
+  @layer components {
+    /* Filter bar */
+    .product-filters {
+      display: flex;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      padding: var(--space-4);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      background: var(--color-white);
+    }
+
+    /* Search */
+    .product-filters__search {
+      display: grid;
+      flex: 1 1 240px;
+      min-width: 190px;
+      gap: var(--space-2);
+    }
+
+    .product-filters__label {
+      color: var(--color-text);
+      font-size: var(--text-small);
+      font-weight: var(--font-weight-medium);
+    }
+
+    .product-filters__search input {
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 42px;
+      padding: 9px 12px;
+      border: 1px solid var(--color-border-strong);
+      border-radius: var(--radius-md);
+      background: var(--color-white);
+      color: var(--color-text);
+      font: inherit;
+      font-size: var(--text-small);
+    }
+
+    /* Dropdown filters */
+    .filter-dropdown {
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .filter-dropdown summary {
+      display: flex;
+      box-sizing: border-box;
+      min-height: 42px;
+      align-items: center;
+      gap: var(--space-3);
+      padding: 9px 14px;
+      border: 1px solid var(--color-border-strong);
+      border-radius: var(--radius-md);
+      background: var(--color-white);
+      color: var(--color-text);
+      cursor: pointer;
+      font-size: var(--text-small);
+      font-weight: var(--font-weight-medium);
+      list-style: none;
+      user-select: none;
+    }
+
+    .filter-dropdown summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .filter-dropdown summary[data-selected]:not([data-selected=""])::after {
+      display: grid;
+      min-width: 19px;
+      height: 19px;
+      place-items: center;
+      padding-inline: 4px;
+      border-radius: var(--radius-full);
+      background: var(--color-primary-soft);
+      color: var(--color-primary);
+      content: attr(data-selected);
+      font-size: 11px;
+      font-weight: var(--font-weight-bold);
+    }
+
+    .filter-dropdown__chevron {
+      width: 7px;
+      height: 7px;
+      border-right: 1.5px solid currentColor;
+      border-bottom: 1.5px solid currentColor;
+      transform: rotate(45deg) translateY(-2px);
+    }
+
+    .filter-dropdown[open] .filter-dropdown__chevron {
+      transform: rotate(225deg) translate(-1px, -1px);
+    }
+
+    .filter-dropdown__panel {
+      position: absolute;
+      z-index: var(--z-dropdown);
+      top: calc(100% + 8px);
+      left: 0;
+      display: grid;
+      min-width: 230px;
+      max-height: 360px;
+      gap: var(--space-3);
+      overflow-y: auto;
+      padding: var(--space-4);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: var(--color-white);
+      box-shadow: var(--shadow-md);
+    }
+
+    .filter-dropdown__panel--categories {
+      min-width: 280px;
+    }
+
+    /* Category groups and checkbox options */
+    .filter-category-group {
+      display: grid;
+      gap: var(--space-2);
+      margin: 0;
+      padding: 0 0 var(--space-3);
+      border: 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .filter-category-group:last-child {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .filter-category-group legend {
+      margin-bottom: var(--space-2);
+      color: var(--color-primary);
+      font-size: var(--text-small);
+      font-weight: var(--font-weight-bold);
+    }
+
+    .filter-option {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      font-size: var(--text-small);
+    }
+
+    .filter-option input {
+      width: 15px;
+      height: 15px;
+      accent-color: var(--color-primary);
+    }
+
+    /* Filter actions */
+    .product-filters__actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-left: auto;
+      min-height: 42px;
+    }
+
+    .product-filters__active {
+      color: var(--color-text-muted);
+      font-size: var(--text-caption);
+    }
+
+    .product-filters__actions button {
+      padding: 8px 4px;
+      border: 0;
+      background: transparent;
+      color: var(--color-primary);
+      cursor: pointer;
+      font: inherit;
+      font-size: var(--text-small);
+      font-weight: var(--font-weight-semibold);
+      white-space: nowrap;
+    }
+
+    /* Keyboard focus */
+    .product-filters input:focus-visible,
+    .filter-dropdown summary:focus-visible,
+    .product-filters button:focus-visible {
+      outline: 2px solid var(--color-focus);
+      outline-offset: 2px;
+    }
+
+    /* Responsive layout */
+    @media (max-width: 640px) {
+      .product-filters {
+        align-items: stretch;
+      }
+
+      .product-filters__search {
+        flex-basis: 100%;
+      }
+
+      .product-filters__actions {
+        margin-left: 0;
+      }
+    }
+  }
+</style>

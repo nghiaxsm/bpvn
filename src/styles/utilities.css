@@ -1,0 +1,117 @@
+/* =========================================
+   BIOPROCESS VIETNAM
+   UTILITY CLASSES
+========================================= */
+
+@layer utilities {
+
+  /* Text */
+
+  .text-primary {
+    color: var(--color-primary);
+  }
+
+  .text-secondary {
+    color: var(--color-secondary);
+  }
+
+  .text-accent {
+    color: var(--color-accent);
+  }
+
+  .text-muted {
+    color: var(--color-text-muted);
+  }
+
+  .text-white {
+    color: var(--color-white);
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .text-left {
+    text-align: left;
+  }
+
+  .text-right {
+    text-align: right;
+  }
+
+
+  /* Display */
+
+  .block {
+    display: block;
+  }
+
+  .inline-block {
+    display: inline-block;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+
+  /* Flex */
+
+  .items-center {
+    align-items: center;
+  }
+
+  .justify-center {
+    justify-content: center;
+  }
+
+  .justify-between {
+    justify-content: space-between;
+  }
+
+
+  /* Width */
+
+  .w-full {
+    width: 100%;
+  }
+
+  .max-w-full {
+    max-width: 100%;
+  }
+
+
+  /* Background */
+
+  .bg-white {
+    background: var(--color-white);
+  }
+
+  .bg-surface {
+    background: var(--color-surface);
+  }
+
+  .bg-primary {
+    background: var(--color-primary);
+  }
+
+  .bg-lavender {
+    background: var(--color-surface-purple);
+  }
+
+
+  /* Accessibility */
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+}

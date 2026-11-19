@@ -1,0 +1,107 @@
+/* =========================================
+   BIOPROCESS VIETNAM
+   CSS RESET
+========================================= */
+
+@layer reset {
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+
+  /* Document */
+
+  html {
+    min-width: 320px;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    min-width: 320px;
+    margin: 0;
+  }
+
+
+  /* Typography */
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  figure,
+  blockquote,
+  dl,
+  dd {
+    margin: 0;
+  }
+
+
+  /* Lists */
+
+  ul,
+  ol {
+    margin: 0;
+    padding: 0;
+  }
+
+
+  /* Media */
+
+  img,
+  picture,
+  video,
+  canvas,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  img,
+  video {
+    height: auto;
+  }
+
+
+  /* Forms */
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  button {
+    color: inherit;
+  }
+
+
+  /* Links */
+
+  a {
+    color: inherit;
+  }
+
+
+  /* Tables */
+
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+
+
+  /* Hidden elements */
+
+  [hidden] {
+    display: none !important;
+  }
+
+}

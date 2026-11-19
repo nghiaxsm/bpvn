@@ -1,0 +1,109 @@
+
+
+---
+interface Props {
+  padding?: "sm" | "md" | "lg";
+  variant?: "default" | "outlined" | "elevated";
+  hover?: boolean;
+  href?: string;
+  class?: string;
+}
+
+const {
+  padding = "md",
+  variant = "default",
+  hover = false,
+  href,
+  class: className = "",
+} = Astro.props;
+
+const classes = [
+  "card",
+  `card--${padding}`,
+  `card--${variant}`,
+  hover && "card--hover",
+  className,
+];
+---
+
+{href ? (
+  <a
+    class:list={classes}
+    href={href}
+  >
+    <slot />
+  </a>
+) : (
+  <article class:list={classes}>
+    <slot />
+  </article>
+)}
+
+<style>
+  .card {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    color: var(--color-text);
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+  }
+
+  .card--sm {
+    padding: var(--space-4);
+  }
+
+  .card--md {
+    padding: var(--space-6);
+  }
+
+  .card--lg {
+    padding: var(--space-8);
+  }
+
+  .card--default {
+    border: 1px solid transparent;
+  }
+
+  .card--outlined {
+    border: 1px solid var(--color-border);
+  }
+
+  .card--elevated {
+    border: 1px solid transparent;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .card--hover {
+    transition:
+      transform var(--transition-normal),
+      box-shadow var(--transition-normal),
+      border-color var(--transition-normal);
+  }
+
+  .card--hover:hover {
+    color: var(--color-text);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .card--outlined.card--hover:hover {
+    border-color: var(--color-primary-light);
+  }
+
+  .card:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card--hover {
+      transition: none;
+    }
+
+    .card--hover:hover {
+      transform: none;
+    }
+  }
+</style>

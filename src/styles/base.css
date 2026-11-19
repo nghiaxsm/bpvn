@@ -1,0 +1,167 @@
+/* =========================================
+   BIOPROCESS VIETNAM
+   GLOBAL BASE STYLES
+========================================= */
+
+
+
+/* =====================================
+   02. BASE STYLES
+===================================== */
+
+@layer base {
+
+  /* =====================================
+     02. DOCUMENT
+  ===================================== */
+
+  html {
+    font-family: var(--font-primary);
+    font-size: 16px;
+    color: var(--color-text);
+    background: var(--color-background);
+  }
+
+  body {
+    min-height: 100vh;
+    font-size: var(--text-body);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-body);
+    color: var(--color-text);
+    background: var(--color-background);
+  }
+
+
+  /* =====================================
+     03. HEADINGS
+  ===================================== */
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--color-primary);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-heading);
+  }
+
+  h1 {
+    font-size: var(--text-h1);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--tracking-tight);
+  }
+
+  h2 {
+    font-size: var(--text-h2);
+    letter-spacing: var(--tracking-tight);
+  }
+
+  h3 {
+    font-size: var(--text-h3);
+  }
+
+  h4 {
+    font-size: var(--text-h4);
+  }
+
+
+  /* =====================================
+     04. TEXT
+  ===================================== */
+
+  p {
+    color: var(--color-text);
+  }
+
+  small {
+    font-size: var(--text-small);
+  }
+
+  strong,
+  b {
+    font-weight: var(--font-weight-semibold);
+  }
+
+
+  /* =====================================
+     05. LINKS
+  ===================================== */
+
+  a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  a:hover {
+    color: var(--color-primary-hover);
+  }
+
+
+  /* =====================================
+     06. IMAGES
+  ===================================== */
+
+  img {
+    max-width: 100%;
+  }
+
+
+  /* =====================================
+     07. BUTTONS
+  ===================================== */
+
+  button {
+    border: 0;
+    font-family: inherit;
+  }
+
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+
+  /* =====================================
+     08. FORM ELEMENTS
+  ===================================== */
+
+  input,
+  textarea,
+  select {
+    color: var(--color-text);
+    background: var(--color-white);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-text-muted);
+    opacity: 1;
+  }
+
+
+  /* =====================================
+     09. SELECTION
+  ===================================== */
+
+  ::selection {
+    color: var(--color-white);
+    background: var(--color-primary);
+  }
+
+
+  /* =====================================
+     10. FOCUS
+  ===================================== */
+
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 3px;
+  }
+
+}

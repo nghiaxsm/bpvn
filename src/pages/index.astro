@@ -1,16 +1,104 @@
+
 ---
+import Container from "../components/common/Container.astro";
+import Button from "../components/common/Button.astro";
+import Badge from "../components/common/Badge.astro";
+import Card from "../components/common/Card.astro";
+import SectionHeading from "../components/common/SectionHeading.astro";
+
+import MainLayout from "../layouts/MainLayout.astro";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<MainLayout
+  title="BPVN - Bioprocess Vietnam"
+  description="Advanced bioprocess technologies and solutions."
+>
+  <section class="section">
+    <Container>
+
+      <SectionHeading
+        eyebrow="Bioprocess Vietnam"
+        title="Building Better Bioprocess Solutions"
+        description="Explore our portfolio of advanced bioprocess technologies, products and solutions."
+        align="center"
+      />
+
+      <div class="demo-buttons">
+        <Button>Contact Us</Button>
+
+        <Button variant="secondary">
+          Explore Solutions
+        </Button>
+
+        <Button variant="outline">
+          View Products
+        </Button>
+      </div>
+
+      <div class="demo-badges">
+        <Badge variant="primary">Featured</Badge>
+        <Badge variant="secondary">Biotechnology</Badge>
+        <Badge variant="success">Available</Badge>
+        <Badge variant="accent">New</Badge>
+      </div>
+
+      <div class="demo-cards">
+        <Card variant="outlined" hover>
+          <Badge variant="primary">Featured Product</Badge>
+          <h3>Bioprocess Product</h3>
+          <p>
+            High-quality products for advanced bioprocess applications.
+          </p>
+          <Button href="/products" variant="ghost" size="sm">
+            Learn More →
+          </Button>
+        </Card>
+
+        <Card variant="elevated" hover>
+          <Badge variant="secondary">Our Solutions</Badge>
+          <h3>Advanced Technologies</h3>
+          <p>
+            Discover innovative technologies for biotechnology research.
+          </p>
+          <Button href="/solutions" variant="ghost" size="sm">
+            Explore →
+          </Button>
+        </Card>
+      </div>
+
+    </Container>
+  </section>
+</MainLayout>
+
+<style>
+  .demo-buttons,
+  .demo-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .demo-cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  .demo-cards h3 {
+    margin-top: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .demo-cards p {
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 600px) {
+    .demo-cards {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

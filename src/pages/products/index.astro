@@ -1,0 +1,159 @@
+---
+import { getCollection } from "astro:content";
+import MainLayout from "../../layouts/MainLayout.astro";
+import ProductFilters from "../../components/product/ProductFilters.astro";
+import ProductGrid from "../../components/product/ProductGrid.astro";
+
+const products = (await getCollection("products"))
+  .sort(
+    (a, b) =>
+      a.data.sortOrder - b.data.sortOrder ||
+      a.data.title.localeCompare(b.data.title),
+  );
+
+const categoryGroups = [
+  {
+    label: "Upstream Processing",
+    categories: [
+      { value: "single-use-bioreactors", label: "Single-use Bioreactors" },
+      { value: "cell-culture-bags", label: "Cell Culture Bags" },
+    ],
+  },
+  {
+    label: "Downstream Processing",
+    categories: [
+      { value: "chromatography-systems", label: "Chromatography Systems" },
+      { value: "filtration-systems", label: "Filtration Systems" },
+      { value: "buffer-management-systems", label: "Buffer Management Systems" },
+    ],
+  },
+  {
+    label: "Aseptic Processing",
+    categories: [
+      { value: "aseptic-connect-disconnect", label: "Aseptic Connect & Disconnect" },
+    ],
+  },
+];
+
+const brandNames: Record<string, string> = {
+  biolink: "BioLink",
+  lisure: "Lisure",
+};
+
+const brandSlugs = [
+  ...new Set(products.map((product) => product.data.brand)),
+].sort((a, b) => a.localeCompare(b));
+
+const brands = brandSlugs.map((slug) => ({
+  value: slug,
+  label: brandNames[slug] ?? slug,
+}));
+---
+
+<MainLayout
+  title="Products | Bioprocess Vietnam"
+  description="Explore bioprocess equipment and technologies from Bioprocess Vietnam. Filter products by category, subcategory and brand."
+>
+  <section class="products-hero">
+    <div class="container">
+      <p class="products-hero__eyebrow">BIOPROCESS VIETNAM</p>
+      <h1>Our Products</h1>
+      <p>
+        Bioprocess equipment and technologies for biopharmaceutical research,
+        process development and manufacturing.
+      </p>
+    </div>
+  </section>
+
+  <div class="container products-main">
+    <ProductFilters categoryGroups={categoryGroups} brands={brands} />
+
+    <section class="products-results" aria-label="Product results">
+      <div class="products-results__heading">
+        <h2>Product Catalogue</h2>
+        <p class="products-results__count" data-results-count>
+          {products.length} products
+        </p>
+      </div>
+
+      {products.length > 0 ? (
+        <ProductGrid products={products} />
+      ) : (
+        <p class="products-results__empty">
+          Product information will be available soon.
+        </p>
+      )}
+    </section>
+  </div>
+</MainLayout>
+
+<style>
+  @layer pages {
+    .products-hero {
+      padding-block: clamp(1.75rem, 3.5vw, 2.75rem);
+      background: var(--color-primary);
+      color: var(--color-white);
+    }
+
+    .products-hero__eyebrow {
+      margin: 0 0 var(--space-2);
+      color: #d9d1ff;
+      font-size: var(--text-caption);
+      font-weight: var(--font-weight-semibold);
+      letter-spacing: var(--tracking-wide);
+    }
+
+    .products-hero h1 {
+      margin: 0;
+      color: var(--color-white);
+      font-size: clamp(1.75rem, 3vw, 2.25rem);
+      line-height: var(--line-tight);
+    }
+
+    .products-hero p:last-child {
+      max-width: 720px;
+      margin: var(--space-2) 0 0;
+      color: #f0edff;
+      font-size: var(--text-small);
+      line-height: var(--line-body);
+    }
+
+    .products-main {
+      padding-block: var(--space-8) var(--space-20);
+    }
+
+    .products-results {
+      margin-top: var(--space-8);
+      min-width: 0;
+    }
+
+    .products-results__heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+      margin-bottom: var(--space-5);
+    }
+
+    .products-results__heading h2 {
+      margin: 0;
+      color: var(--color-text);
+      font-size: var(--text-h3);
+    }
+
+    .products-results__heading .products-results__count {
+      flex: 0 0 auto;
+      margin: 0;
+      color: var(--color-text-muted);
+      font-size: var(--text-small);
+    }
+
+    .products-results__empty {
+      padding: var(--space-8);
+      border: 1px dashed var(--color-border-strong);
+      border-radius: var(--radius-lg);
+      color: var(--color-text-secondary);
+      text-align: center;
+    }
+  }
+</style>

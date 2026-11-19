@@ -1,0 +1,98 @@
+
+
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  align?: "left" | "center";
+  level?: "h1" | "h2" | "h3";
+  class?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  description,
+  align = "left",
+  level = "h2",
+  class: className = "",
+} = Astro.props;
+
+const HeadingTag = level;
+---
+
+<header
+  class:list={[
+    "section-heading",
+    `section-heading--${align}`,
+    className,
+  ]}
+>
+  {eyebrow && (
+    <span class="section-heading__eyebrow">
+      {eyebrow}
+    </span>
+  )}
+
+  <HeadingTag class="section-heading__title">
+    {title}
+  </HeadingTag>
+
+  {description && (
+    <p class="section-heading__description">
+      {description}
+    </p>
+  )}
+
+  <slot />
+</header>
+
+<style>
+  .section-heading {
+    max-width: 760px;
+    margin-bottom: var(--space-12);
+  }
+
+  .section-heading--center {
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .section-heading__eyebrow {
+    display: inline-block;
+    margin-bottom: var(--space-3);
+    color: var(--color-secondary);
+    font-size: var(--text-small);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+  }
+
+  .section-heading__title {
+    margin: 0;
+    color: var(--color-primary);
+    font-size: var(--text-h2);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-heading);
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .section-heading__description {
+    margin-top: var(--space-4);
+    color: var(--color-text-secondary);
+    font-size: var(--text-body-lg);
+    line-height: var(--line-body);
+  }
+
+  .section-heading--center .section-heading__description {
+    margin-inline: auto;
+    max-width: 640px;
+  }
+
+  @media (max-width: 560px) {
+    .section-heading {
+      margin-bottom: var(--space-8);
+    }
+  }
+</style>

@@ -1,0 +1,107 @@
+/* =========================================
+   BIOPROCESS VIETNAM
+   ANIMATIONS
+========================================= */
+
+@layer components {
+
+  /* =====================================
+     01. PAGE TRANSITIONS
+  ===================================== */
+
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-old(root) {
+    animation: page-out 180ms ease both;
+  }
+
+  ::view-transition-new(root) {
+    animation: page-in 250ms ease both;
+  }
+
+  @keyframes page-out {
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes page-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+
+  /* =====================================
+     02. HOVER INTERACTIONS
+  ===================================== */
+
+  .hover-lift {
+    transition:
+      transform var(--transition-normal),
+      box-shadow var(--transition-normal);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+
+  /* =====================================
+     03. FLOATING EFFECT
+  ===================================== */
+
+  @keyframes floating {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .animate-floating {
+    animation: floating 5s ease-in-out infinite;
+  }
+
+
+  /* =====================================
+     04. REDUCED MOTION
+  ===================================== */
+
+  @media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+      scroll-behavior: auto !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none;
+    }
+
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .hover-lift:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+  }
+
+}
