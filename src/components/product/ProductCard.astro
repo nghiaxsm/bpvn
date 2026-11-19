@@ -48,7 +48,6 @@ const brandLabel = brandNames[brand] ?? brand;
 </article>
 
 <style>
-  @layer components {
     .product-card {
       display: flex;
       min-width: 0;
@@ -112,9 +111,10 @@ const brandLabel = brandNames[brand] ?? brand;
     .product-card__title {
       margin: 0;
       color: var(--color-text);
-      font-size: var(--text-body);
+      font-size: 20px;
       font-weight: var(--font-weight-semibold);
-      line-height: var(--line-heading);
+      line-height: 1.35;
+      overflow-wrap: break-word;
     }
 
     .product-card__model {
@@ -132,5 +132,5 @@ const brandLabel = brandNames[brand] ?? brand;
         box-shadow: var(--shadow-md);
       }
     }
-  }
+  
 </style>

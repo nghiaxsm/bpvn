@@ -48,12 +48,6 @@
       box-shadow var(--transition-normal);
   }
 
-  .hover-lift:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
-  }
-
-
   /* =====================================
      03. FLOATING EFFECT
   ===================================== */

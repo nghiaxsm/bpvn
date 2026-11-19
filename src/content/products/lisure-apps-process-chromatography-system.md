@@ -1,5 +1,5 @@
 ---
-title: "APPS Process Chromatography System"
+title: "Process Chromatography System"
 model: "APPS Process"
 description: "A modular, low-pressure process-scale automated chromatography system for large-scale production of biological products."
 brand: "lisure"

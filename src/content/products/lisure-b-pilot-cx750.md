@@ -1,5 +1,5 @@
 ---
-title: "B Pilot CX750 Chromatography & TFF System"
+title: "Pilot Chromatography & TFF System"
 model: "B Pilot CX750"
 description: "An integrated pilot-scale purification platform combining chromatography and tangential flow filtration in one system for process development and scale-up."
 brand: "lisure"

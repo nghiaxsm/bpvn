@@ -166,6 +166,7 @@ const isActive = (path: string) => {
 </header>
 
 <style>
+  @layer components {
   /* =====================================
      HEADER
   ===================================== */
@@ -202,22 +203,7 @@ const isActive = (path: string) => {
     max-height: 48px;
     object-fit: contain;
   }
-
-  .header__logo {
-    display: inline-flex;
-    align-items: center;
-    flex-shrink: 0;
-  }
-
-  .header__logo img {
-    display: block;
-    width: 180px;
-    height: auto;
-    aspect-ratio: 3 / 1;
-    object-fit: contains;
-  }
-
-  /* Desktop Navigation */
+/* Desktop Navigation */
 
   .header__nav {
     display: flex;
@@ -380,10 +366,11 @@ const isActive = (path: string) => {
       display: block;
     }
 
-    @media (max-width: 560px) {
-      .header__logo img {
-        width: 150px;
-      }
+  }
+
+  @media (max-width: 560px) {
+    .header__brand img {
+      width: 150px;
     }
   }
 
@@ -392,5 +379,6 @@ const isActive = (path: string) => {
     .mobile-menu__link {
       transition: none;
     }
+  }
   }
 </style>

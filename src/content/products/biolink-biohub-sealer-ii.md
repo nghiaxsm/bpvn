@@ -1,5 +1,5 @@
 ---
-title: "BioHub® Sealer Ⅱ"
+title: "Portable Aseptic Sealer"
 model: "BioHub® Sealer Ⅱ"
 description: "A portable heat sealer for sterile disconnection of single-use tubing assemblies and disposable components in biopharmaceutical manufacturing."
 brand: "biolink"

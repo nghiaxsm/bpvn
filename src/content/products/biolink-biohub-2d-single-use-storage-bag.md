@@ -1,5 +1,5 @@
 ---
-title: "BioHub® 2D Single-Use Storage Bag"
+title: "2D Single-Use Storage Bag"
 model: "BioHub® 2D"
 description: "A disposable 2D bioprocess bag for storage, mixing, transfer and cryopreservation of process liquids, with configurable tubing and connector assemblies."
 brand: "biolink"

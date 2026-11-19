@@ -58,6 +58,14 @@
     color: var(--color-white);
   }
 
+  .section--dark a {
+    color: var(--color-white);
+  }
+
+  .section--dark a:hover {
+    color: var(--color-primary-soft);
+  }
+
 
   /* =====================================
      03. SECTION HEADING

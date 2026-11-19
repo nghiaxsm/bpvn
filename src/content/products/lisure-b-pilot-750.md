@@ -1,5 +1,5 @@
 ---
-title: "B Pilot 750 Chromatography System"
+title: "Pilot Chromatography System"
 model: "B Pilot 750"
 description: "A benchtop chromatography platform for process development, pilot-scale research, proof-of-concept studies and small-scale GMP-grade purification."
 brand: "lisure"
