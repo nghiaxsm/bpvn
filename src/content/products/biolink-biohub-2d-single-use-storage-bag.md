@@ -4,7 +4,7 @@ model: "BioHub® 2D"
 description: "A disposable 2D bioprocess bag for storage, mixing, transfer and cryopreservation of process liquids, with configurable tubing and connector assemblies."
 brand: "biolink"
 categories:
-  - "cell-culture-bags"
+  - "storage-transfer"
 image: "/images/products/biolink-biohub-2d-disposable-bioprocess-bags.webp"
 featured: false
 ---

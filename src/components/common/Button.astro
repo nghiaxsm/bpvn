@@ -1,7 +1,6 @@
-
 ---
 interface Props {
-  variant?: "primary" | "outline" | "outline-light";
+  variant?: "primary" | "outline" | "outline-light" | "filter";
   size?: "sm" | "md" | "lg";
   href?: string;
   type?: "button" | "submit" | "reset";
@@ -10,6 +9,12 @@ interface Props {
   target?: "_blank" | "_self";
   rel?: string;
   class?: string;
+  ariaPressed?: boolean;
+  dataFilterToggle?: string;
+  dataFilterValue?: string;
+  dataParentId?: string;
+  dataFilterAll?: string;
+  dataClearFilters?: boolean;
 }
 
 const {
@@ -22,6 +27,12 @@ const {
   target,
   rel,
   class: className = "",
+  ariaPressed,
+  dataFilterToggle,
+  dataFilterValue,
+  dataParentId,
+  dataFilterAll,
+  dataClearFilters = false,
 } = Astro.props;
 
 const classes = [
@@ -51,6 +62,12 @@ const classes = [
     class:list={classes}
     type={type}
     disabled={disabled}
+    aria-pressed={ariaPressed}
+    data-filter-toggle={dataFilterToggle}
+    data-filter-value={dataFilterValue}
+    data-parent-id={dataParentId}
+    data-filter-all={dataFilterAll}
+    data-clear-filters={dataClearFilters ? "" : undefined}
   >
     <slot name="icon-start" />
     <span class="button__label"><slot /></span>
@@ -59,9 +76,6 @@ const classes = [
 )}
 
 <style>
-  @layer components {
-    /* Base */
-
     .button {
       display: inline-flex;
       align-items: center;
@@ -86,8 +100,6 @@ const classes = [
       display: inline-block;
     }
 
-    /* Sizes */
-
     .button--sm {
       min-height: 36px;
       padding: 0.5rem 0.875rem;
@@ -106,8 +118,6 @@ const classes = [
       font-size: var(--text-body-lg);
     }
 
-    /* Primary */
-
     .button--primary {
       color: #FFFFFF;
       background: var(--color-primary);
@@ -123,8 +133,6 @@ const classes = [
       background: var(--color-primary-hover);
       border-color: var(--color-primary-hover);
     }
-
-    /* Outline */
 
     .button--outline {
       color: var(--color-primary);
@@ -146,8 +154,6 @@ const classes = [
       color: #FFFFFF;
     }
 
-    /* Outline Light - Dark backgrounds */
-
     .button--outline-light {
       color: #FFFFFF;
       background: transparent;
@@ -168,14 +174,59 @@ const classes = [
       color: var(--color-primary);
     }
 
-    /* Focus */
+    /* Compact filter toggle variant */
+    .button--filter {
+      min-height: 30px;
+      padding: 0.3rem 0.65rem;
+      border-color: var(--color-border-strong);
+      border-radius: 6px;
+      background: var(--color-white);
+      color: var(--color-text-secondary);
+      font-size: 0.75rem;
+      font-weight: var(--font-weight-medium);
+      line-height: 1.25;
+    }
+
+    .button--filter .button__label {
+      color: inherit;
+    }
+
+    .button--filter:hover:not(:disabled) {
+      border-color: var(--color-primary-400);
+      background: var(--color-primary-50);
+      color: var(--color-primary-700);
+    }
+
+    .button--filter[aria-pressed="true"] {
+      border-color: var(--color-primary-700);
+      background: var(--color-primary-700);
+      color: #FFFFFF;
+      box-shadow: inset 0 0 0 1px rgb(255 255 255 / 12%);
+    }
+
+    .button--filter[aria-pressed="true"] .button__label {
+      color: #FFFFFF;
+    }
+
+    .button--filter-all {
+      min-height: 26px;
+      padding: 0.2rem 0.55rem;
+      border-color: var(--color-primary-200);
+      background: var(--color-primary-50);
+      color: var(--color-primary-700);
+      font-size: 0.6875rem;
+    }
+
+    .button--filter-all[aria-pressed="false"] {
+      border-color: var(--color-border);
+      background: var(--color-white);
+      color: var(--color-text-muted);
+    }
 
     .button:focus-visible {
       outline: 2px solid var(--color-primary-300);
       outline-offset: 3px;
     }
-
-    /* Disabled */
 
     .button:disabled,
     .button[aria-disabled="true"] {
@@ -190,18 +241,13 @@ const classes = [
       color: var(--color-disabled-text);
     }
 
-    /* Full width */
-
     .button--full {
       width: 100%;
     }
-
-    /* Reduced motion */
 
     @media (prefers-reduced-motion: reduce) {
       .button {
         transition: none;
       }
     }
-  }
 </style>

@@ -4,7 +4,7 @@ model: "BioHub® 3D"
 description: "A 3D single-use bioprocess bag range for storage and transportation of process liquids, designed for compatibility with BioLink plastic and stainless-steel containers."
 brand: "biolink"
 categories:
-  - "cell-culture-bags"
+  - "storage-transfer"
 image: "/images/products/biolink-biohub-3d-disposable-bioprocess-bags.webp"
 featured: false
 ---

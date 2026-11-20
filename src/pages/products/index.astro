@@ -11,30 +11,6 @@ const products = (await getCollection("products"))
       a.data.title.localeCompare(b.data.title),
   );
 
-const categoryGroups = [
-  {
-    label: "Upstream Processing",
-    categories: [
-      { value: "single-use-bioreactors", label: "Single-use Bioreactors" },
-      { value: "cell-culture-bags", label: "Cell Culture Bags" },
-    ],
-  },
-  {
-    label: "Downstream Processing",
-    categories: [
-      { value: "chromatography-systems", label: "Chromatography Systems" },
-      { value: "filtration-systems", label: "Filtration Systems" },
-      { value: "buffer-management-systems", label: "Buffer Management Systems" },
-    ],
-  },
-  {
-    label: "Aseptic Processing",
-    categories: [
-      { value: "aseptic-connect-disconnect", label: "Aseptic Connect & Disconnect" },
-    ],
-  },
-];
-
 const brandNames: Record<string, string> = {
   biolink: "BioLink",
   lisure: "Lisure",
@@ -66,7 +42,7 @@ const brands = brandSlugs.map((slug) => ({
   </section>
 
   <div class="container products-main">
-    <ProductFilters categoryGroups={categoryGroups} brands={brands} />
+    <ProductFilters brands={brands} />
 
     <section class="products-results" aria-label="Product results">
       <div class="products-results__heading">

@@ -4,7 +4,7 @@ model: "CBMS"
 description: "An engineered buffer preparation and management solution using inline mixing, multi-relay tanks and automated process monitoring for biopharmaceutical facilities."
 brand: "lisure"
 categories:
-  - "buffer-management-systems"
+  - "mixing-systems"
 image: "/images/products/lisure-continuous-buffer-management-system.webp"
 featured: true
 ---
