@@ -1,8 +1,6 @@
-
-
 ---
 interface Props {
-  variant?: "primary" | "secondary" | "accent" | "neutral" | "success" | "warning" | "error" | "info";
+  variant?: "primary" | "neutral" | "success" | "warning" | "error" | "info";
   size?: "sm" | "md";
   pill?: boolean;
   class?: string;
@@ -29,73 +27,88 @@ const {
 </span>
 
 <style>
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: fit-content;
-    border: 1px solid transparent;
-    border-radius: var(--radius-sm);
-    font-weight: var(--font-weight-semibold);
-    line-height: 1.4;
-    white-space: nowrap;
-  }
+  @layer components {
+    /* =====================================
+       BADGE
+    ===================================== */
 
-  .badge--sm {
-    padding: 0.2rem 0.5rem;
-    font-size: var(--text-caption);
-  }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: fit-content;
+      max-width: 100%;
+      padding: 0.3rem 0.7rem;
+      border: 1px solid transparent;
+      border-radius: 0.375rem;
+      font-size: 0.875rem;
+      font-weight: var(--font-weight-semibold);
+      line-height: 1.4;
+      text-align: center;
+      white-space: nowrap;
+    }
 
-  .badge--md {
-    padding: 0.3rem 0.75rem;
-    font-size: var(--text-small);
-  }
+    /* Sizes */
 
-  .badge--pill {
-    border-radius: var(--radius-full);
-  }
+    .badge--sm {
+      padding: 0.2rem 0.5rem;
+      font-size: 0.75rem;
+    }
 
-  .badge--primary {
-    color: var(--color-primary);
-    background: var(--color-primary-soft);
-  }
+    .badge--md {
+      padding: 0.3rem 0.7rem;
+      font-size: 0.875rem;
+    }
 
-  .badge--secondary {
-    color: var(--color-secondary);
-    background: var(--color-secondary-soft);
-  }
+    /* Shape */
 
-  .badge--accent {
-    color: #72500A;
-    background: var(--color-accent-soft);
-  }
+    .badge--pill {
+      border-radius: 9999px;
+    }
 
-  .badge--neutral {
-    color: var(--color-text-secondary);
-    background: var(--color-surface);
-  }
+    /* Brand */
 
-  .badge--success {
-    color: var(--color-success);
-    background: var(--color-success-bg);
-    border-color: var(--color-success-border);
-  }
+    .badge--primary {
+      color: var(--color-primary-800);
+      background: var(--color-primary-100);
+      border-color: var(--color-primary-200);
+    }
 
-  .badge--warning {
-    color: var(--color-warning);
-    background: var(--color-warning-bg);
-    border-color: var(--color-warning-border);
-  }
+    /* Neutral */
 
-  .badge--error {
-    color: var(--color-error);
-    background: var(--color-error-bg);
-    border-color: var(--color-error-border);
-  }
+    .badge--neutral {
+      color: var(--color-text-secondary);
+      background: var(--color-surface);
+      border-color: var(--color-border);
+    }
 
-  .badge--info {
-    color: var(--color-info);
-    background: var(--color-info-bg);
-    border-color: var(--color-info-border);
+    /* Semantic states
+       Strict monochrome: states use purple tones.
+       Use clear labels/icons to communicate meaning.
+    */
+
+    .badge--success {
+      color: var(--color-primary-700);
+      background: var(--color-success-soft);
+      border-color: var(--color-primary-200);
+    }
+
+    .badge--warning {
+      color: var(--color-primary-800);
+      background: var(--color-warning-soft);
+      border-color: var(--color-primary-300);
+    }
+
+    .badge--error {
+      color: var(--color-primary-900);
+      background: var(--color-error-soft);
+      border-color: var(--color-primary-300);
+    }
+
+    .badge--info {
+      color: var(--color-primary-700);
+      background: var(--color-info-soft);
+      border-color: var(--color-primary-200);
+    }
   }
 </style>

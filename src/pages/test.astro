@@ -1,0 +1,396 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import Container from '../components/common/Container.astro';
+import SectionHeading from '../components/common/SectionHeading.astro';
+import Button from '../components/common/Button.astro';
+import Badge from '../components/common/Badge.astro';
+import Card from '../components/common/Card.astro';
+
+const purpleScale = [
+  { name: 'Purple 50', value: '#F7F5FC', token: '--color-primary-50' },
+  { name: 'Purple 100', value: '#E9E4F8', token: '--color-primary-100' },
+  { name: 'Purple 200', value: '#D3C9F0', token: '--color-primary-200' },
+  { name: 'Purple 300', value: '#B5A6E2', token: '--color-primary-300' },
+  { name: 'Purple 400', value: '#8069CA', token: '--color-primary-400' },
+  { name: 'Purple 500', value: '#200291', token: '--color-primary-500' },
+  { name: 'Purple 600', value: '#1C027F', token: '--color-primary-600' },
+  { name: 'Purple 700', value: '#16006B', token: '--color-primary-700' },
+  { name: 'Purple 800', value: '#120052', token: '--color-primary-800' },
+  { name: 'Purple 900', value: '#0D003D', token: '--color-primary-900' },
+];
+
+const neutrals = [
+  { name: 'Text', token: '--color-text', value: '#211B32' },
+  { name: 'Text secondary', token: '--color-text-secondary', value: '#514A63' },
+  { name: 'Text muted', token: '--color-text-muted', value: '#777087' },
+  { name: 'Background', token: '--color-background', value: '#FCFBFE' },
+  { name: 'Surface', token: '--color-surface', value: '#F7F5FC' },
+  { name: 'Border', token: '--color-border', value: '#E8E4F0' },
+];
+
+const states = [
+  { name: 'Success', token: '--color-success', soft: '--color-success-soft', badge: 'success' },
+  { name: 'Warning', token: '--color-warning', soft: '--color-warning-soft', badge: 'warning' },
+  { name: 'Error', token: '--color-error', soft: '--color-error-soft', badge: 'error' },
+  { name: 'Info', token: '--color-info', soft: '--color-info-soft', badge: 'info' },
+];
+---
+
+<MainLayout
+  title="Design System Test | Bioprocess Vietnam"
+  description="Trang kiểm tra bảng màu và các component giao diện của Bioprocess Vietnam."
+>
+  <main class="test-page">
+    <section class="test-hero">
+      <Container size="wide">
+        <p class="eyebrow eyebrow-light">BIOPROCESS VIETNAM · DESIGN SYSTEM</p>
+        <h1>Color system<br /><span>Strict Monochrome</span></h1>
+        <p class="hero-copy">
+          Kiểm tra bảng màu tím đơn sắc, hệ thống màu trung tính và cách các design
+          token được áp dụng trên những component thực tế của website.
+        </p>
+        <div class="hero-actions">
+          <Button variant="primary" href="#components">Primary action</Button>
+          <Button variant="outline-light" href="#palette">Explore palette</Button>
+        </div>
+      </Container>
+    </section>
+
+    <section class="test-section" id="palette">
+      <Container size="wide">
+        <SectionHeading
+          eyebrow="01 / BRAND COLORS"
+          title="Purple scale"
+          description="Thang màu chủ đạo được phát triển từ màu thương hiệu Primary #200291."
+          level="h2"
+        />
+        <div class="color-grid">
+          {purpleScale.map((color) => (
+            <article class="swatch">
+              <div class="swatch-color" style={`background:${color.value}`}></div>
+              <div class="swatch-meta">
+                <strong>{color.name}</strong>
+                <span>{color.value}</span>
+                <code>{color.token}</code>
+              </div>
+            </article>
+          ))}
+        </div>
+      </Container>
+    </section>
+
+    <section class="test-section section-surface">
+      <Container size="wide">
+        <SectionHeading
+          eyebrow="02 / NEUTRAL COLORS"
+          title="Neutral foundation"
+          description="Các sắc độ trung tính có undertone tím, dùng cho chữ, nền, bề mặt và đường viền."
+          level="h2"
+        />
+        <div class="neutral-grid">
+          {neutrals.map((color) => (
+            <article class="neutral-card">
+              <div class="neutral-preview" style={`background:${color.value}`}></div>
+              <div class="neutral-meta">
+                <strong>{color.name}</strong>
+                <span>{color.value}</span>
+                <code>{color.token}</code>
+              </div>
+            </article>
+          ))}
+        </div>
+      </Container>
+    </section>
+
+    <section class="test-section">
+      <Container size="wide">
+        <SectionHeading
+          eyebrow="03 / SEMANTIC COLORS"
+          title="State colors"
+          description="Trạng thái được thể hiện bằng sắc độ tím, nhãn và cách sử dụng component Badge."
+          level="h2"
+        />
+        <div class="state-grid">
+          {states.map((state) => (
+            <Card variant="outlined" padding="md" class="state-card">
+              <Badge variant={state.badge} size="md">{state.name}</Badge>
+              <p><code>{state.token}</code></p>
+              <p class="state-token">Soft token: <code>{state.soft}</code></p>
+            </Card>
+          ))}
+        </div>
+      </Container>
+    </section>
+
+    <section class="test-section section-surface" id="components">
+      <Container size="wide">
+        <SectionHeading
+          eyebrow="04 / COMPONENT LIBRARY"
+          title="Real component preview"
+          description="Các nút, nhãn và thẻ bên dưới được render từ component dùng chung trong dự án, không dựng lại bằng HTML/CSS riêng."
+          level="h2"
+        />
+
+        <Card variant="outlined" padding="lg" class="component-panel">
+          <h3>Button variants · Light surface</h3>
+          <div class="component-row">
+            <Button variant="primary" href="#palette">Primary</Button>
+            <Button variant="outline" href="#palette">Outline</Button>
+            <Button variant="primary" disabled>Disabled</Button>
+          </div>
+        </Card>
+
+        <div class="dark-preview">
+          <div class="dark-preview-copy">
+            <p class="eyebrow eyebrow-light">DARK SURFACE</p>
+            <h3>Outline light button</h3>
+            <p>Kiểm tra variant outline-light trên nền tím đậm thực tế.</p>
+          </div>
+          <div class="component-row">
+            <Button variant="primary" href="#palette">Primary</Button>
+            <Button variant="outline-light" href="#palette">Outline light</Button>
+          </div>
+        </div>
+
+        <div class="badge-preview">
+          <h3>Badge variants</h3>
+          <div class="component-row">
+            <Badge variant="primary">Primary</Badge>
+            <Badge variant="neutral">Neutral</Badge>
+            <Badge variant="success">Success</Badge>
+            <Badge variant="warning">Warning</Badge>
+            <Badge variant="error">Error</Badge>
+            <Badge variant="info">Info</Badge>
+          </div>
+        </div>
+
+        <div class="card-grid">
+          <Card variant="default" padding="lg">
+            <p class="eyebrow">DEFAULT CARD</p>
+            <h3>Bioprocess solutions</h3>
+            <p>Kiểm tra surface, typography và khoảng cách nội dung trong Card component.</p>
+            <a href="#palette">Learn more →</a>
+          </Card>
+          <Card variant="outlined" padding="lg">
+            <p class="eyebrow">OUTLINED CARD</p>
+            <h3>Single-use technology</h3>
+            <p>Kiểm tra đường viền và tương phản trên nền sáng.</p>
+            <a href="#palette">Learn more →</a>
+          </Card>
+          <Card variant="elevated" padding="lg" hover>
+            <p class="eyebrow">ELEVATED CARD</p>
+            <h3>Process excellence</h3>
+            <p>Kiểm tra trạng thái nổi và hiệu ứng hover của Card component.</p>
+            <a href="#palette">Explore →</a>
+          </Card>
+        </div>
+      </Container>
+    </section>
+
+    <section class="test-section">
+      <Container size="wide">
+        <SectionHeading
+          eyebrow="05 / TYPOGRAPHY"
+          title="Typography hierarchy"
+          description="Font family: Noto Sans · Body line-height: 1.6 · Heading line-height: 1.2."
+          level="h2"
+        />
+        <Card variant="outlined" padding="lg" class="type-sample">
+          <h1>Heading level one</h1>
+          <h2>Heading level two</h2>
+          <h3>Heading level three</h3>
+          <h4>Heading level four</h4>
+          <p class="type-body">Body text — Bioprocess Vietnam provides technologies and solutions for biopharmaceutical manufacturing, helping customers improve process efficiency, quality and scalability.</p>
+          <p class="type-small">Small text — Supporting information, metadata and captions.</p>
+        </Card>
+      </Container>
+    </section>
+
+    <section class="test-footer">
+      <Container size="wide">
+        <p class="eyebrow eyebrow-light">BIOPROCESS VIETNAM</p>
+        <h2>One color system.<br />Consistent experience.</h2>
+        <p>Trang kiểm tra giao diện — không phải trang nội dung dành cho khách hàng.</p>
+        <div class="footer-actions">
+          <Button variant="primary" href="#palette">Back to palette</Button>
+          <Button variant="outline-light" href="#components">View components</Button>
+        </div>
+      </Container>
+    </section>
+  </main>
+</MainLayout>
+
+<style>
+  .test-page {
+    color: var(--color-text, #211B32);
+    background: var(--color-background, #FCFBFE);
+    font-family: var(--font-primary, "Noto Sans", sans-serif);
+  }
+
+  .test-hero {
+    padding: clamp(5rem, 10vw, 8rem) 0;
+    color: #FFFFFF;
+    background: var(--color-primary-800, #120052);
+  }
+
+  .eyebrow {
+    margin: 0 0 1rem;
+    color: var(--color-primary-600, #1C027F);
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+  }
+
+  .eyebrow-light { color: var(--color-primary-200, #D3C9F0); }
+
+  .test-hero h1 {
+    margin: 0;
+    color: #FFFFFF;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -.045em;
+  }
+
+  .test-hero h1 span { color: var(--color-primary-300, #B5A6E2); }
+
+  .hero-copy {
+    max-width: 650px;
+    margin: 1.5rem 0 0;
+    color: var(--color-primary-100, #E9E4F8);
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+
+  .hero-actions, .component-row, .footer-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .75rem;
+  }
+
+  .hero-actions { margin-top: 2rem; }
+
+  .test-section { padding: clamp(3.5rem, 7vw, 6rem) 0; }
+  .section-surface { background: var(--color-surface, #F7F5FC); }
+
+  .color-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .swatch, .neutral-card {
+    overflow: hidden;
+    border: 1px solid var(--color-border, #E8E4F0);
+    border-radius: .75rem;
+    background: #FFFFFF;
+  }
+
+  .swatch-color { height: 112px; }
+  .swatch-meta, .neutral-meta { display: grid; gap: .25rem; padding: .85rem; }
+  .swatch-meta strong, .neutral-meta strong { font-size: .9rem; }
+  .swatch-meta span, .neutral-meta span { color: var(--color-text-secondary, #514A63); font-size: .82rem; }
+
+  code {
+    color: var(--color-primary-700, #16006B);
+    font-size: .72rem;
+    overflow-wrap: anywhere;
+  }
+
+  .neutral-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .neutral-preview { height: 90px; border-bottom: 1px solid var(--color-border, #E8E4F0); }
+
+  .state-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .state-card p { margin: .8rem 0 0; }
+  .state-card .state-token { color: var(--color-text-secondary, #514A63); }
+
+  .component-panel h3, .badge-preview h3 {
+    margin: 0 0 1.25rem;
+    color: var(--color-primary-700, #16006B);
+  }
+
+  .dark-preview {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-top: 1.25rem;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    border-radius: .75rem;
+    color: #FFFFFF;
+    background: var(--color-primary-800, #120052);
+  }
+
+  .dark-preview-copy { max-width: 480px; }
+  .dark-preview h3 { margin: 0; color: #FFFFFF; font-size: 1.5rem; }
+  .dark-preview-copy > p:last-child { margin: .5rem 0 0; color: var(--color-primary-100, #E9E4F8); line-height: 1.6; }
+
+  .badge-preview { margin-top: 2rem; }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 1.25rem;
+  }
+
+  .card-grid h3 { margin-top: 0; color: var(--color-primary-700, #16006B); }
+  .card-grid p:not(.eyebrow) { color: var(--color-text-secondary, #514A63); line-height: 1.65; }
+  .card-grid a { color: var(--color-primary-600, #1C027F); font-weight: 600; text-decoration: none; }
+
+  .type-sample h1, .type-sample h2, .type-sample h3, .type-sample h4 {
+    margin: 0 0 .8rem;
+    color: var(--color-primary-700, #16006B);
+    line-height: 1.2;
+  }
+  .type-sample h1 { font-size: clamp(2rem, 4vw, 3rem); }
+  .type-sample h2 { font-size: 2.25rem; }
+  .type-sample h3 { font-size: 1.75rem; }
+  .type-sample h4 { font-size: 1.25rem; }
+  .type-body { color: var(--color-text-secondary, #514A63); line-height: 1.6; }
+  .type-small { color: var(--color-text-muted, #777087); font-size: .875rem; }
+
+  .test-footer {
+    padding: 4rem 0;
+    color: #FFFFFF;
+    background: var(--color-primary-900, #0D003D);
+  }
+  .test-footer h2 {
+    margin: 0;
+    color: #FFFFFF;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.15;
+  }
+  .test-footer > :global(.container) > p:not(.eyebrow) {
+    margin: 1rem 0 0;
+    color: var(--color-primary-200, #D3C9F0);
+  }
+  .footer-actions { margin-top: 1.5rem; }
+
+  @media (max-width: 900px) {
+    .color-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .state-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .card-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    .neutral-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .state-grid { grid-template-columns: 1fr; }
+    .dark-preview { align-items: flex-start; }
+    .dark-preview .component-row { width: 100%; }
+    .dark-preview .component-row :global(.button) { flex: 1 1 100%; }
+    .hero-actions { align-items: flex-start; }
+  }
+</style>

@@ -1,19 +1,11 @@
-
-
 ---
 const currentYear = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
-
   <div class="container">
-
-    <!-- Main Footer -->
     <div class="footer__main">
-
-      <!-- Brand -->
       <div class="footer__brand">
-
         <a
           href="/"
           class="footer__logo"
@@ -33,111 +25,81 @@ const currentYear = new Date().getFullYear();
           technologies, products and solutions with the
           needs of the biotechnology industry.
         </p>
-
       </div>
 
-      <!-- Explore -->
       <div class="footer__column">
-
-        <h2 class="footer__heading">
-          Explore
-        </h2>
-
+        <h2 class="footer__heading">Explore</h2>
         <ul class="footer__links">
           <li><a href="/products">Products</a></li>
           <li><a href="/brands">Brands</a></li>
           <li><a href="/solutions">Solutions</a></li>
-          <li><a href="/news">News & Insights</a></li>
+          <li><a href="/news">News &amp; Insights</a></li>
         </ul>
-
       </div>
 
-      <!-- Company -->
       <div class="footer__column">
-
-        <h2 class="footer__heading">
-          Company
-        </h2>
-
+        <h2 class="footer__heading">Company</h2>
         <ul class="footer__links">
           <li><a href="/about">About Us</a></li>
           <li><a href="/contact">Contact Us</a></li>
         </ul>
-
       </div>
 
-      <!-- Contact -->
       <div class="footer__column footer__contact">
-
-        <h2 class="footer__heading">
-          Get in Touch
-        </h2>
-
+        <h2 class="footer__heading">Get in Touch</h2>
         <p>
           Have a question about our products or solutions?
           Get in touch with our team.
         </p>
-
         <a href="/contact" class="footer__contact-link">
           Contact our team
           <span aria-hidden="true">→</span>
         </a>
-
       </div>
-
     </div>
 
-    <!-- Footer Bottom -->
     <div class="footer__bottom">
-
       <p class="footer__copyright">
-        © {currentYear} Bioprocess Vietnam.
-        All rights reserved.
+        © {currentYear} Bioprocess Vietnam. All rights reserved.
       </p>
-
       <a href="/" class="footer__back-home">
         Back to Home
         <span aria-hidden="true">↑</span>
       </a>
-
     </div>
-
   </div>
-
 </footer>
 
 <style>
-  /* =====================================
-     FOOTER
-  ===================================== */
+  /*
+   * Footer uses explicit monochrome palette values.
+   * These rules are intentionally unlayered so they take
+   * precedence over generic global link and paragraph styles.
+   */
 
   .site-footer {
-    color: var(--color-white);
-    background: var(--color-primary-active);
+    color: #ffffff;
+    background: #120052;
   }
 
-  /* Main Footer */
-
-  .footer__main {
+  .site-footer .footer__main {
     display: grid;
     grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
     gap: var(--space-10);
     padding-block: var(--space-16);
   }
 
-  /* Brand */
-
-  .footer__brand {
+  .site-footer .footer__brand {
     max-width: 360px;
   }
 
-  .footer__logo {
+  .site-footer .footer__logo {
     display: inline-flex;
     align-items: center;
     margin-bottom: var(--space-5);
   }
 
-  .footer__logo img {
+  .site-footer .footer__logo img {
     display: block;
     width: 220px;
     max-width: 100%;
@@ -146,41 +108,29 @@ const currentYear = new Date().getFullYear();
     object-fit: contain;
   }
 
-  .footer__description {
-    margin-bottom: var(--space-5);
-    color: rgb(255 255 255 / 72%);
+  .site-footer .footer__description,
+  .site-footer .footer__contact p {
+    color: #e9e4f8;
     font-size: var(--text-small);
     line-height: var(--line-body);
   }
 
-  .footer__cta {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    color: var(--color-accent);
-    font-size: var(--text-small);
-    font-weight: var(--font-weight-semibold);
-    transition: color var(--transition-fast);
+  .site-footer .footer__description {
+    margin-bottom: var(--space-5);
   }
 
-  .footer__cta:hover {
-    color: var(--color-white);
-  }
-
-  /* Columns */
-
-  .footer__column {
+  .site-footer .footer__column {
     min-width: 0;
   }
 
-  .footer__heading {
-    margin-bottom: var(--space-5);
-    color: var(--color-white);
+  .site-footer .footer__heading {
+    margin: 0 0 var(--space-5);
+    color: #ffffff;
     font-size: var(--text-body);
     font-weight: var(--font-weight-semibold);
   }
 
-  .footer__links {
+  .site-footer .footer__links {
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
@@ -189,100 +139,88 @@ const currentYear = new Date().getFullYear();
     list-style: none;
   }
 
-  .footer__links a {
-    color: rgb(255 255 255 / 72%);
+  .site-footer .footer__links a,
+  .site-footer .footer__back-home {
+    color: #e9e4f8;
     font-size: var(--text-small);
+    text-decoration: none;
     transition: color var(--transition-fast);
   }
 
-  .footer__links a:hover {
-    color: var(--color-accent);
+  .site-footer .footer__links a:hover,
+  .site-footer .footer__back-home:hover {
+    color: #ffffff;
   }
 
-  /* Contact */
-
-  .footer__contact p {
-    margin-bottom: var(--space-4);
-    color: rgb(255 255 255 / 72%);
-    font-size: var(--text-small);
-    line-height: var(--line-body);
+  .site-footer .footer__contact p {
+    margin: 0 0 var(--space-4);
   }
 
-  .footer__contact-link {
+  .site-footer .footer__contact-link {
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
-    color: var(--color-accent);
+    color: #d3c9f0;
     font-size: var(--text-small);
     font-weight: var(--font-weight-semibold);
+    text-decoration: none;
     transition: color var(--transition-fast);
   }
 
-  .footer__contact-link:hover {
-    color: var(--color-white);
+  .site-footer .footer__contact-link:hover {
+    color: #ffffff;
   }
 
-  /* Footer Bottom */
-
-  .footer__bottom {
+  .site-footer .footer__bottom {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--space-4);
     min-height: 72px;
     padding-block: var(--space-4);
-    border-top: 1px solid rgb(255 255 255 / 16%);
+    border-top: 1px solid rgb(255 255 255 / 28%);
   }
 
-  .footer__copyright {
+  .site-footer .footer__copyright {
     margin: 0;
-    color: rgb(255 255 255 / 60%);
+    color: #d3c9f0;
     font-size: var(--text-small);
   }
 
-  .footer__back-home {
+  .site-footer .footer__back-home {
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
-    color: rgb(255 255 255 / 72%);
-    font-size: var(--text-small);
-    transition: color var(--transition-fast);
   }
-
-  .footer__back-home:hover {
-    color: var(--color-accent);
-  }
-
-  /* Responsive */
 
   @media (max-width: 1024px) {
-    .footer__main {
+    .site-footer .footer__main {
       grid-template-columns: 1.5fr 1fr 1fr;
       row-gap: var(--space-10);
     }
 
-    .footer__contact {
+    .site-footer .footer__contact {
       grid-column: 2 / -1;
     }
   }
 
   @media (max-width: 640px) {
-    .footer__main {
+    .site-footer .footer__main {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: var(--space-8) var(--space-5);
       padding-block: var(--space-12);
     }
 
-    .footer__brand {
+    .site-footer .footer__brand {
       grid-column: 1 / -1;
       max-width: 100%;
     }
 
-    .footer__contact {
+    .site-footer .footer__contact {
       grid-column: auto;
     }
 
-    .footer__bottom {
+    .site-footer .footer__bottom {
       align-items: flex-start;
       flex-direction: column;
       justify-content: center;
@@ -291,21 +229,20 @@ const currentYear = new Date().getFullYear();
   }
 
   @media (max-width: 380px) {
-    .footer__main {
+    .site-footer .footer__main {
       grid-template-columns: 1fr;
     }
 
-    .footer__brand,
-    .footer__contact {
+    .site-footer .footer__brand,
+    .site-footer .footer__contact {
       grid-column: auto;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .footer__cta,
-    .footer__links a,
-    .footer__contact-link,
-    .footer__back-home {
+    .site-footer .footer__links a,
+    .site-footer .footer__contact-link,
+    .site-footer .footer__back-home {
       transition: none;
     }
   }

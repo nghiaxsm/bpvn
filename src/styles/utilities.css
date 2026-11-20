@@ -5,18 +5,20 @@
 
 @layer utilities {
 
-  /* Text */
+  /* =====================================
+     01. TEXT
+  ===================================== */
 
   .text-primary {
     color: var(--color-primary);
   }
 
   .text-secondary {
-    color: var(--color-secondary);
+    color: var(--color-text-secondary);
   }
 
   .text-accent {
-    color: var(--color-accent);
+    color: var(--color-primary-400);
   }
 
   .text-muted {
@@ -39,8 +41,9 @@
     text-align: right;
   }
 
-
-  /* Display */
+  /* =====================================
+     02. DISPLAY
+  ===================================== */
 
   .block {
     display: block;
@@ -54,8 +57,9 @@
     display: none;
   }
 
-
-  /* Flex */
+  /* =====================================
+     03. FLEX ALIGNMENT
+  ===================================== */
 
   .items-center {
     align-items: center;
@@ -69,8 +73,9 @@
     justify-content: space-between;
   }
 
-
-  /* Width */
+  /* =====================================
+     04. WIDTH
+  ===================================== */
 
   .w-full {
     width: 100%;
@@ -80,8 +85,9 @@
     max-width: 100%;
   }
 
-
-  /* Background */
+  /* =====================================
+     05. BACKGROUND
+  ===================================== */
 
   .bg-white {
     background: var(--color-white);
@@ -96,11 +102,12 @@
   }
 
   .bg-lavender {
-    background: var(--color-surface-purple);
+    background: var(--color-primary-subtle);
   }
 
-
-  /* Accessibility */
+  /* =====================================
+     06. ACCESSIBILITY
+  ===================================== */
 
   .sr-only {
     position: absolute;

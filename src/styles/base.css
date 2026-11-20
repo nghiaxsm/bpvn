@@ -3,16 +3,9 @@
    GLOBAL BASE STYLES
 ========================================= */
 
-
-
-/* =====================================
-   02. BASE STYLES
-===================================== */
-
 @layer base {
-
   /* =====================================
-     02. DOCUMENT
+     01. DOCUMENT
   ===================================== */
 
   html {
@@ -31,9 +24,8 @@
     background: var(--color-background);
   }
 
-
   /* =====================================
-     03. HEADINGS
+     02. HEADINGS
   ===================================== */
 
   h1,
@@ -66,9 +58,8 @@
     font-size: var(--text-h4);
   }
 
-
   /* =====================================
-     04. TEXT
+     03. TEXT
   ===================================== */
 
   p {
@@ -84,9 +75,8 @@
     font-weight: var(--font-weight-semibold);
   }
 
-
   /* =====================================
-     05. LINKS
+     04. LINKS
   ===================================== */
 
   a {
@@ -99,18 +89,16 @@
     color: var(--color-primary-hover);
   }
 
-
   /* =====================================
-     06. IMAGES
+     05. IMAGES
   ===================================== */
 
   img {
     max-width: 100%;
   }
 
-
   /* =====================================
-     07. BUTTONS
+     06. BUTTONS
   ===================================== */
 
   button {
@@ -126,14 +114,15 @@
     cursor: not-allowed;
   }
 
-
   /* =====================================
-     08. FORM ELEMENTS
+     07. FORM ELEMENTS
   ===================================== */
 
   input,
   textarea,
   select {
+    font-family: inherit;
+    font-size: inherit;
     color: var(--color-text);
     background: var(--color-white);
   }
@@ -144,9 +133,8 @@
     opacity: 1;
   }
 
-
   /* =====================================
-     09. SELECTION
+     08. SELECTION
   ===================================== */
 
   ::selection {
@@ -154,14 +142,13 @@
     background: var(--color-primary);
   }
 
-
   /* =====================================
-     10. FOCUS
+     09. FOCUS
+     Monochrome purple focus indicator
   ===================================== */
 
   :focus-visible {
-    outline: 2px solid var(--color-focus);
+    outline: 2px solid var(--color-primary-300);
     outline-offset: 3px;
   }
-
 }

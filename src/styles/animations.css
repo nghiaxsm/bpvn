@@ -3,92 +3,65 @@
    ANIMATIONS
 ========================================= */
 
-@layer components {
+/* =====================================
+   01. VIEW TRANSITIONS
+   Progressive enhancement for supported browsers
+===================================== */
 
-  /* =====================================
-     01. PAGE TRANSITIONS
-  ===================================== */
+@view-transition {
+  navigation: auto;
+}
 
-  @view-transition {
-    navigation: auto;
-  }
-
+@layer pages {
   ::view-transition-old(root) {
-    animation: page-out 180ms ease both;
+    animation: page-out 160ms ease-in both;
   }
 
   ::view-transition-new(root) {
-    animation: page-in 250ms ease both;
+    animation: page-in 220ms ease-out both;
+  }
+}
+
+/* =====================================
+   02. KEYFRAMES
+===================================== */
+
+@keyframes page-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
   }
 
-  @keyframes page-out {
-    to {
-      opacity: 0;
-    }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes floating {
+  0%,
+  100% {
+    transform: translateY(0);
   }
 
-  @keyframes page-in {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
+  50% {
+    transform: translateY(-6px);
   }
+}
 
+/* =====================================
+   03. UTILITY ANIMATIONS
+===================================== */
 
-  /* =====================================
-     02. HOVER INTERACTIONS
-  ===================================== */
-
+@layer utilities {
   .hover-lift {
     transition:
       transform var(--transition-normal),
       box-shadow var(--transition-normal);
-  }
-
-  /* =====================================
-     03. FLOATING EFFECT
-  ===================================== */
-
-  @keyframes floating {
-
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-
-    50% {
-      transform: translateY(-10px);
-    }
-  }
-
-  .animate-floating {
-    animation: floating 5s ease-in-out infinite;
-  }
-
-
-  /* =====================================
-     04. REDUCED MOTION
-  ===================================== */
-
-  @media (prefers-reduced-motion: reduce) {
-
-    *,
-    *::before,
-    *::after {
-      scroll-behavior: auto !important;
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
-
-    ::view-transition-old(root),
-    ::view-transition-new(root) {
-      animation: none;
-    }
-
   }
 
   @media (hover: hover) and (pointer: fine) {
@@ -98,4 +71,29 @@
     }
   }
 
+  .animate-floating {
+    animation: floating 6s ease-in-out infinite;
+  }
+}
+
+/* =====================================
+   04. REDUCED MOTION
+   Respect the user's operating-system preference
+===================================== */
+
+@layer utilities {
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      scroll-behavior: auto !important;
+      animation: none !important;
+      transition: none !important;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none !important;
+    }
+  }
 }

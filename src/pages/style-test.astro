@@ -1,0 +1,998 @@
+
+---
+import "../styles/global.css";
+
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import Button from "../components/common/Button.astro";
+import Badge from "../components/common/Badge.astro";
+
+const buttonVariants = ["primary", "outline"] as const;
+
+const darkButtonVariants = ["primary", "outline-light"] as const;
+
+const buttonSizes = [
+  { value: "sm", label: "SM" },
+  { value: "md", label: "MD" },
+  { value: "lg", label: "LG" },
+] as const;
+
+const badgeVariants = ["primary", "neutral"] as const;
+
+const colors = [
+  { name: "Primary 50", variable: "--color-primary-50" },
+  { name: "Primary 100", variable: "--color-primary-100" },
+  { name: "Primary 200", variable: "--color-primary-200" },
+  { name: "Primary 300", variable: "--color-primary-300" },
+  { name: "Primary 400", variable: "--color-primary-400" },
+  { name: "Primary 500", variable: "--color-primary-500" },
+  { name: "Primary 600", variable: "--color-primary-600" },
+  { name: "Primary 700", variable: "--color-primary-700" },
+  { name: "Primary 800", variable: "--color-primary-800" },
+  { name: "Primary 900", variable: "--color-primary-900" },
+  { name: "Text", variable: "--color-text" },
+  { name: "Text Secondary", variable: "--color-text-secondary" },
+  { name: "Text Muted", variable: "--color-text-muted" },
+  { name: "Background", variable: "--color-background" },
+  { name: "Surface", variable: "--color-surface" },
+  { name: "Border", variable: "--color-border" },
+];
+---
+
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Trang kiểm thử giao diện và hệ thống thiết kế Bioprocess Vietnam."
+    />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Kiểm thử giao diện | Bioprocess Vietnam</title>
+  </head>
+
+  <body>
+    <!-- HEADER THẬT -->
+    <Header />
+
+    <main class="style-test">
+
+      <!-- INTRO -->
+      <section class="style-test__hero">
+        <div class="container">
+          <Badge variant="neutral" pill>BPVN DESIGN SYSTEM</Badge>
+
+          <h1>Kiểm thử hệ thống thiết kế</h1>
+
+          <p>
+            Trang kiểm tra trực quan các thành phần giao diện,
+            màu sắc, typography, button, layout và hiệu ứng CSS
+            của Bioprocess Vietnam.
+          </p>
+
+          <div class="style-test__hero-actions">
+            <Button href="/contact" variant="primary" size="lg">
+              Liên hệ với chúng tôi
+            </Button>
+
+            <Button href="/products" variant="outline" size="lg">
+              Khám phá sản phẩm
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 01 HEADER BUTTON TEST -->
+      <section class="section" id="header-buttons">
+        <div class="container">
+          <div class="section-heading">
+            <Badge variant="primary">01 / Header Buttons</Badge>
+            <h2>Kiểm thử Button trên Header</h2>
+            <p>
+              Kiểm tra khả năng hiển thị, màu chữ, màu nền và
+              kích thước Button trên nền trắng của Header.
+            </p>
+          </div>
+
+          <!-- Header mockup -->
+          <div class="style-test__header-preview">
+            <a href="/" class="style-test__header-brand">
+              <strong>BPVN</strong>
+              <span>HEADER PREVIEW</span>
+            </a>
+
+            <nav class="style-test__header-nav" aria-label="Navigation preview">
+              <a href="#header-buttons">Trang chủ</a>
+              <a href="#colors">Sản phẩm</a>
+              <a href="#badges">Giải pháp</a>
+            </nav>
+
+            <div class="style-test__header-actions">
+              <Button href="/contact" variant="primary" size="sm">
+                Liên hệ
+              </Button>
+
+              <Button href="/products" variant="outline" size="sm">
+                Sản phẩm
+              </Button>
+            </div>
+          </div>
+
+          <div class="style-test__panel">
+            <h3>2 kiểu button trên nền sáng</h3>
+
+            <div class="style-test__component-row">
+              {buttonVariants.map((variant) => (
+                <div class="style-test__button-example">
+                  <Button variant={variant}>
+                    {variant}
+                  </Button>
+                  <span>{variant}</span>
+                </div>
+              ))}
+            </div>
+
+            <p class="style-test__note">
+              Chỉ sử dụng Primary cho hành động chính và Outline cho hành động phụ.
+              Outline Light dành riêng cho nền tối.
+            </p>
+
+            <hr />
+
+            <h3>Quy tắc phân cấp hành động</h3>
+
+            <div class="style-test__component-row">
+              <div class="style-test__button-example">
+                <Button variant="primary">Liên hệ</Button>
+                <span>Hành động chính</span>
+              </div>
+
+              <div class="style-test__button-example">
+                <Button variant="outline">Xem sản phẩm</Button>
+                <span>Hành động phụ</span>
+              </div>
+            </div>
+
+            <hr />
+
+            <h3>3 kích thước</h3>
+
+            <div class="style-test__component-row">
+              {buttonSizes.map((buttonSize) => (
+                <div class="style-test__button-example">
+                  <Button size={buttonSize.value}>
+                    {buttonSize.label}
+                  </Button>
+                  <span>{buttonSize.value}</span>
+                </div>
+              ))}
+            </div>
+
+            <hr />
+
+            <h3>Trạng thái Button</h3>
+
+            <div class="style-test__component-row">
+              <div class="style-test__button-example">
+                <Button variant="primary">Normal</Button>
+                <span>Bình thường</span>
+              </div>
+
+              <div class="style-test__button-example">
+                <Button variant="primary" disabled>
+                  Disabled
+                </Button>
+                <span>Vô hiệu hóa</span>
+              </div>
+
+              <div class="style-test__button-example">
+                <Button variant="outline" disabled>
+                  Outline Disabled
+                </Button>
+                <span>Outline Disabled</span>
+              </div>
+
+            </div>
+
+            <hr />
+
+            <h3>Button toàn chiều rộng</h3>
+
+            <Button fullWidth variant="primary">
+              Liên hệ với đội ngũ BPVN
+            </Button>
+
+            <hr />
+
+            <h3>Button có icon</h3>
+
+            <div class="style-test__component-row">
+              <Button variant="primary">
+                <span slot="icon-start" aria-hidden="true">←</span>
+                Quay lại
+              </Button>
+
+              <Button variant="outline">
+                Khám phá
+                <span slot="icon-end" aria-hidden="true">→</span>
+              </Button>
+            </div>
+
+            <hr />
+
+            <h3>Button dạng liên kết</h3>
+
+            <div class="style-test__component-row">
+              <Button href="/products" variant="primary">
+                Xem sản phẩm
+              </Button>
+
+              <Button href="/contact" variant="outline">
+                Liên hệ
+              </Button>
+
+              <Button href="/contact" target="_blank" variant="outline">
+                Mở tab mới
+              </Button>
+
+              <Button href="/contact" disabled>
+                Liên kết Disabled
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 02 FOOTER BUTTON TEST -->
+      <section class="style-test__footer-test" id="footer-buttons">
+        <div class="container">
+          <div class="section-heading">
+            <Badge variant="primary">02 / Footer Buttons</Badge>
+            <h2>Kiểm thử Button trên Footer</h2>
+            <p>
+              Kiểm tra khả năng tương phản của Button trên nền tím đậm,
+              tương tự Footer thật của Bioprocess Vietnam.
+            </p>
+          </div>
+
+          <!-- Footer CTA mockup -->
+          <div class="style-test__footer-preview">
+            <div class="style-test__footer-brand">
+              <strong>BPVN</strong>
+              <span>FOOTER PREVIEW</span>
+            </div>
+
+            <div class="style-test__footer-content">
+              <h3>Cùng phát triển giải pháp sinh học</h3>
+
+              <p>
+                Liên hệ với đội ngũ Bioprocess Vietnam để tìm hiểu
+                các sản phẩm và giải pháp phù hợp.
+              </p>
+
+              <div class="style-test__footer-buttons">
+                <Button href="/contact" variant="primary" size="lg">
+                  Liên hệ với chúng tôi
+                </Button>
+
+                <Button href="/products" variant="outline-light" size="lg">
+                  Xem sản phẩm
+                </Button>
+
+                <Button href="/solutions" variant="outline-light" size="lg">
+                  Khám phá giải pháp
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          <div class="style-test__footer-panel">
+            <h3>Button trên nền tối</h3>
+
+            <div class="style-test__component-row">
+              {darkButtonVariants.map((variant) => (
+                <div class="style-test__button-example">
+                  <Button variant={variant}>
+                    {variant}
+                  </Button>
+                  <span>{variant}</span>
+                </div>
+              ))}
+            </div>
+
+            <p class="style-test__contrast-note">
+              Trên nền tối, sử dụng Primary hoặc biến thể Outline Light
+              để bảo đảm độ tương phản và khả năng đọc.
+            </p>
+
+            <hr />
+
+            <h3>Hai kiểu button trong hệ thống</h3>
+
+            <div class="style-test__component-row">
+              <div class="style-test__button-example">
+                <Button variant="primary">Primary</Button>
+                <span>Hành động chính</span>
+              </div>
+
+              <div class="style-test__button-example">
+                <Button variant="outline-light">Outline</Button>
+                <span>Hành động phụ trên nền tối</span>
+              </div>
+            </div>
+
+            <hr />
+
+            <h3>Kích thước trên nền tối</h3>
+
+            <div class="style-test__component-row">
+              {buttonSizes.map((buttonSize) => (
+                <div class="style-test__button-example">
+                  <Button variant="outline-light" size={buttonSize.value}>
+                    {buttonSize.label}
+                  </Button>
+                  <span>{buttonSize.value}</span>
+                </div>
+              ))}
+            </div>
+
+            <hr />
+
+            <h3>Trạng thái Disabled trên nền tối</h3>
+
+            <div class="style-test__component-row">
+              <div class="style-test__button-example">
+                <Button variant="outline-light" disabled>
+                  Disabled
+                </Button>
+                <span>Không khả dụng</span>
+              </div>
+            </div>
+
+            <hr />
+
+            <h3>Button toàn chiều rộng</h3>
+
+            <Button variant="outline-light" fullWidth>
+              Liên hệ với đội ngũ BPVN
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 03 TYPOGRAPHY -->
+      <section class="section" id="typography">
+        <div class="container">
+          <div class="section-heading">
+            <Badge variant="primary">03 / Typography</Badge>
+            <h2>Hệ thống kiểu chữ</h2>
+            <p>
+              Kiểm tra font Noto Sans, kích thước, độ đậm,
+              chiều cao dòng và khả năng hiển thị tiếng Việt.
+            </p>
+          </div>
+
+          <div class="style-test__panel">
+            <h1>Tiêu đề cấp 1 – Công nghệ sinh học tiên tiến</h1>
+            <h2>Tiêu đề cấp 2 – Giải pháp quy trình sinh học</h2>
+            <h3>Tiêu đề cấp 3 – Thiết bị và vật tư sản xuất</h3>
+            <h4>Tiêu đề cấp 4 – Hệ thống xử lý sinh học</h4>
+            <h5>Tiêu đề cấp 5 – Nghiên cứu và phát triển</h5>
+            <h6>Tiêu đề cấp 6 – Thông tin kỹ thuật</h6>
+
+            <hr />
+
+            <p>
+              Bioprocess Vietnam cung cấp các sản phẩm và giải pháp
+              công nghệ sinh học phục vụ ngành dược phẩm,
+              công nghệ sinh học và sản xuất sinh dược.
+            </p>
+
+            <p>
+              <strong>Chữ đậm:</strong>
+              Giải pháp chất lượng cao cho quy trình sản xuất sinh học.
+            </p>
+
+            <p>
+              <small>Chữ nhỏ: Thông tin bổ sung và ghi chú kỹ thuật.</small>
+            </p>
+
+            <p>
+              <a href="#header-buttons">
+                Liên kết văn bản – di chuột để kiểm tra.
+              </a>
+            </p>
+
+            <p class="text-secondary">Văn bản màu phụ – text-secondary.</p>
+            <p class="text-muted">Văn bản màu nhạt – text-muted.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 04 COLORS -->
+      <section class="section section--surface" id="colors">
+        <div class="container">
+          <div class="section-heading">
+            <Badge variant="primary">04 / Design Tokens</Badge>
+            <h2>Bảng màu thương hiệu</h2>
+            <p>Kiểm tra các biến màu được khai báo trong tokens.css.</p>
+          </div>
+
+          <div class="style-test__color-grid">
+            {colors.map((color) => (
+              <div class="style-test__color-card">
+                <div
+                  class="style-test__swatch"
+                  style={`background-color: var(${color.variable});`}
+                ></div>
+
+                <div class="style-test__color-info">
+                  <strong>{color.name}</strong>
+                  <code>{color.variable}</code>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- 05 BADGES -->
+      <section class="section" id="badges">
+        <div class="container">
+          <div class="section-heading">
+            <Badge variant="primary">05 / Badges</Badge>
+            <h2>Các loại nhãn thông tin</h2>
+            <p>Kiểm tra màu sắc, đường viền và kích thước Badge.</p>
+          </div>
+
+          <div class="style-test__panel">
+            <h3>Các biến thể Badge</h3>
+
+            <div class="style-test__component-row">
+              {badgeVariants.map((variant) => (
+                <Badge variant={variant}>{variant}</Badge>
+              ))}
+            </div>
+
+            <hr />
+
+            <h3>Kích thước và kiểu Pill</h3>
+
+            <div class="style-test__component-row">
+              <Badge size="sm">Nhãn nhỏ</Badge>
+              <Badge size="md">Nhãn trung bình</Badge>
+              <Badge pill variant="primary">Nổi bật</Badge>
+              <Badge pill variant="neutral">Công nghệ sinh học</Badge>
+              <Badge pill variant="neutral">Đang hoạt động</Badge>
+              <Badge pill variant="primary">Mới</Badge>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 06 LAYOUT -->
+      <section class="section" id="layout">
+        <div class="container">
+          <div class="section-heading">
+            <Badge variant="primary">06 / Layout</Badge>
+            <h2>Hệ thống bố cục</h2>
+            <p>Kiểm tra Container, Section, Grid và Flex.</p>
+          </div>
+
+          <h3>Grid – 2 cột</h3>
+          <div class="grid grid--2 style-test__layout-grid">
+            <div class="style-test__demo-box">Thành phần 01</div>
+            <div class="style-test__demo-box">Thành phần 02</div>
+          </div>
+
+          <h3>Grid – 3 cột</h3>
+          <div class="grid grid--3 style-test__layout-grid">
+            <div class="style-test__demo-box">Thành phần 01</div>
+            <div class="style-test__demo-box">Thành phần 02</div>
+            <div class="style-test__demo-box">Thành phần 03</div>
+          </div>
+
+          <h3>Grid – 4 cột</h3>
+          <div class="grid grid--4 style-test__layout-grid">
+            <div class="style-test__demo-box">Thành phần 01</div>
+            <div class="style-test__demo-box">Thành phần 02</div>
+            <div class="style-test__demo-box">Thành phần 03</div>
+            <div class="style-test__demo-box">Thành phần 04</div>
+          </div>
+
+          <h3>Grid – Auto Fit</h3>
+          <div class="grid grid--auto style-test__layout-grid">
+            <div class="style-test__demo-box">Tự động 01</div>
+            <div class="style-test__demo-box">Tự động 02</div>
+            <div class="style-test__demo-box">Tự động 03</div>
+          </div>
+
+          <h3>Flex – Space Between</h3>
+          <div class="flex flex--between style-test__demo-box">
+            <span>Nội dung bên trái</span>
+            <span>Nội dung bên phải</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 07 FORMS -->
+      <section class="section section--surface" id="forms">
+        <div class="container">
+          <div class="section-heading">
+            <Badge variant="primary">07 / Forms</Badge>
+            <h2>Các thành phần biểu mẫu</h2>
+            <p>Kiểm tra font chữ, placeholder và trạng thái focus.</p>
+          </div>
+
+          <div class="style-test__panel">
+            <form class="style-test__form">
+              <div class="style-test__form-field">
+                <label for="test-name">Họ và tên</label>
+                <input
+                  id="test-name"
+                  type="text"
+                  placeholder="Nhập họ và tên của bạn"
+                />
+              </div>
+
+              <div class="style-test__form-field">
+                <label for="test-email">Địa chỉ Email</label>
+                <input
+                  id="test-email"
+                  type="email"
+                  placeholder="example@email.com"
+                />
+              </div>
+
+              <div class="style-test__form-field">
+                <label for="test-category">Lĩnh vực quan tâm</label>
+                <select id="test-category">
+                  <option>Chọn lĩnh vực</option>
+                  <option>Kháng thể</option>
+                  <option>Peptide</option>
+                  <option>mRNA</option>
+                  <option>Viral Vector</option>
+                </select>
+              </div>
+
+              <div class="style-test__form-field">
+                <label for="test-message">Nội dung</label>
+                <textarea
+                  id="test-message"
+                  rows="4"
+                  placeholder="Nhập nội dung..."
+                ></textarea>
+              </div>
+
+              <label class="style-test__choice">
+                <input type="checkbox" />
+                Tôi đồng ý nhận thông tin cập nhật.
+              </label>
+
+              <label class="style-test__choice">
+                <input type="radio" name="test-radio" />
+                Lựa chọn A
+              </label>
+
+              <label class="style-test__choice">
+                <input type="radio" name="test-radio" />
+                Lựa chọn B
+              </label>
+
+              <Button type="button">Gửi thử nghiệm</Button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- 08 EFFECTS -->
+      <section class="section" id="effects">
+        <div class="container">
+          <div class="section-heading">
+            <Badge variant="primary">08 / Effects</Badge>
+            <h2>Hiệu ứng và chuyển động</h2>
+            <p>Di chuột lên các thành phần để kiểm tra hiệu ứng CSS.</p>
+          </div>
+
+          <div class="grid grid--3">
+            <div class="style-test__effect-card hover-lift">
+              <h3>Hover Lift</h3>
+              <p>Kiểm tra transform và box-shadow khi hover.</p>
+            </div>
+
+            <div class="style-test__effect-card animate-floating">
+              <h3>Floating</h3>
+              <p>Kiểm tra hiệu ứng chuyển động nổi.</p>
+            </div>
+
+            <div class="style-test__effect-card">
+              <h3>Transitions</h3>
+              <p>Kiểm tra trạng thái và chuyển động.</p>
+              <Button variant="outline" size="sm">
+                Di chuột vào đây
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FOOTER THẬT -->
+    <Footer />
+  </body>
+</html>
+
+<style>
+  @layer pages {
+    /* HERO */
+
+    .style-test__hero {
+      padding-block: var(--space-20);
+      text-align: center;
+      background: var(--color-primary-soft);
+    }
+
+    .style-test__hero h1 {
+      margin-top: var(--space-5);
+    }
+
+    .style-test__hero p {
+      max-width: 680px;
+      margin: var(--space-4) auto var(--space-8);
+      color: var(--color-text-secondary);
+    }
+
+    .style-test__hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--space-3);
+    }
+
+    /* COMMON PANEL */
+
+    .style-test__panel {
+      padding: var(--space-8);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      background: var(--color-white);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .style-test__panel hr,
+    .style-test__footer-panel hr {
+      margin-block: var(--space-6);
+      border: 0;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .style-test__component-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-5);
+    }
+
+    .style-test__button-example {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .style-test__button-example > span {
+      color: var(--color-text-muted);
+      font-size: var(--text-caption);
+      text-align: center;
+    }
+
+    /* HEADER PREVIEW */
+
+    .style-test__header-preview {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-5);
+      min-height: 84px;
+      margin-bottom: var(--space-6);
+      padding: var(--space-4) var(--space-6);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      background: var(--color-white);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .style-test__header-brand {
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      gap: 2px;
+      text-decoration: none;
+    }
+
+    .style-test__header-brand strong {
+      color: var(--color-primary);
+      font-size: 1.75rem;
+      line-height: 1;
+    }
+
+    .style-test__header-brand span {
+      color: var(--color-text-muted);
+      font-size: var(--text-caption);
+      letter-spacing: 0.08em;
+    }
+
+    .style-test__header-nav {
+      display: flex;
+      align-items: center;
+      gap: var(--space-5);
+    }
+
+    .style-test__header-nav a {
+      color: var(--color-text-secondary);
+      font-size: var(--text-small);
+      font-weight: var(--font-weight-medium);
+      text-decoration: none;
+    }
+
+    .style-test__header-nav a:hover {
+      color: var(--color-primary);
+    }
+
+    .style-test__header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .style-test__note {
+      max-width: 760px;
+      margin-top: var(--space-4);
+      color: var(--color-text-muted);
+      font-size: var(--text-small);
+    }
+
+    /* FOOTER BUTTON TEST */
+
+    .style-test__footer-test {
+      padding-block: var(--space-16);
+      color: var(--color-white);
+      background: var(--color-primary-900);
+    }
+
+    .style-test__footer-test .section-heading h2 {
+      color: var(--color-white);
+    }
+
+    .style-test__footer-test .section-heading p {
+      color: rgb(255 255 255 / 75%);
+    }
+
+    .style-test__footer-preview {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: var(--space-8);
+      margin-bottom: var(--space-8);
+      padding: var(--space-8);
+      border: 1px solid rgb(255 255 255 / 16%);
+      border-radius: var(--radius-lg);
+      background: rgb(255 255 255 / 4%);
+    }
+
+    .style-test__footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .style-test__footer-brand strong {
+      color: var(--color-primary-200);
+      font-size: 2.5rem;
+      line-height: 1;
+    }
+
+    .style-test__footer-brand span {
+      color: rgb(255 255 255 / 65%);
+    }
+
+    .style-test__footer-content h3 {
+      color: var(--color-white);
+    }
+
+    .style-test__footer-content p {
+      margin-top: var(--space-3);
+      color: rgb(255 255 255 / 75%);
+    }
+
+    .style-test__footer-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      margin-top: var(--space-6);
+    }
+
+    .style-test__footer-panel {
+      padding: var(--space-8);
+      border: 1px solid rgb(255 255 255 / 16%);
+      border-radius: var(--radius-lg);
+      background: rgb(255 255 255 / 4%);
+    }
+
+    .style-test__footer-panel h3 {
+      color: var(--color-white);
+    }
+
+    .style-test__footer-panel .style-test__button-example > span {
+      color: rgb(255 255 255 / 65%);
+    }
+
+    .style-test__contrast-note {
+      max-width: 760px;
+      margin-top: var(--space-5);
+      color: rgb(255 255 255 / 72%);
+      font-size: var(--text-small);
+      line-height: var(--line-body);
+    }
+
+    /* COLORS */
+
+    .style-test__color-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-5);
+    }
+
+    .style-test__color-card {
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: var(--color-white);
+    }
+
+    .style-test__swatch {
+      height: 100px;
+    }
+
+    .style-test__color-info {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+      padding: var(--space-3);
+    }
+
+    .style-test__color-info code {
+      color: var(--color-text-muted);
+      font-size: var(--text-caption);
+      overflow-wrap: anywhere;
+    }
+
+    /* LAYOUT */
+
+    .style-test__layout-grid {
+      margin-bottom: var(--space-8);
+    }
+
+    .style-test__demo-box {
+      padding: var(--space-6);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: var(--color-primary-soft);
+      text-align: center;
+    }
+
+    /* FORMS */
+
+    .style-test__form {
+      display: grid;
+      gap: var(--space-5);
+      max-width: 640px;
+    }
+
+    .style-test__form-field {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .style-test__form-field label {
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .style-test__form-field input,
+    .style-test__form-field select,
+    .style-test__form-field textarea {
+      width: 100%;
+      min-height: 44px;
+      padding: var(--space-3);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+    }
+
+    .style-test__choice {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    /* EFFECTS */
+
+    .style-test__effect-card {
+      min-height: 180px;
+      padding: var(--space-6);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      background: var(--color-white);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 900px) {
+      .style-test__header-nav {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .style-test__hero {
+        padding-block: var(--space-12);
+      }
+
+      .style-test__panel,
+      .style-test__footer-panel {
+        padding: var(--space-5);
+      }
+
+      .style-test__color-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .style-test__footer-preview {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .style-test__hero-actions {
+        flex-direction: column;
+      }
+
+      .style-test__hero-actions .button {
+        width: 100%;
+      }
+
+      .style-test__header-preview {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .style-test__header-actions {
+        width: 100%;
+      }
+
+      .style-test__header-actions .button {
+        flex: 1;
+      }
+
+      .style-test__color-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .style-test__footer-buttons {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .style-test__footer-buttons .button {
+        width: 100%;
+      }
+
+      .style-test__component-row {
+        gap: var(--space-4);
+      }
+    }
+  }
+</style>

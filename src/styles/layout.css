@@ -27,7 +27,6 @@
     max-width: none;
   }
 
-
   /* =====================================
      02. SECTION
   ===================================== */
@@ -45,7 +44,7 @@
   }
 
   .section--lavender {
-    background: var(--color-surface-purple);
+    background: var(--color-primary-subtle);
   }
 
   .section--dark {
@@ -66,24 +65,8 @@
     color: var(--color-primary-soft);
   }
 
-
   /* =====================================
-     03. SECTION HEADING
-  ===================================== */
-
-  .section-heading {
-    max-width: 760px;
-    margin-bottom: var(--space-12);
-  }
-
-  .section-heading--center {
-    margin-inline: auto;
-    text-align: center;
-  }
-
-
-  /* =====================================
-     04. GRID
+     03. GRID
   ===================================== */
 
   .grid {
@@ -108,9 +91,8 @@
       repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   }
 
-
   /* =====================================
-     05. FLEX
+     04. FLEX
   ===================================== */
 
   .flex {
@@ -134,22 +116,17 @@
     flex-direction: column;
   }
 
-
   /* =====================================
-     06. RESPONSIVE
+     05. RESPONSIVE
   ===================================== */
 
   @media (max-width: 1024px) {
-
     .grid--4 {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-
   }
 
-
   @media (max-width: 768px) {
-
     :root {
       --container-padding: 20px;
     }
@@ -162,12 +139,9 @@
     .grid--4 {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-
   }
 
-
   @media (max-width: 560px) {
-
     :root {
       --container-padding: 18px;
     }
@@ -181,7 +155,5 @@
     .grid--4 {
       grid-template-columns: 1fr;
     }
-
   }
-
 }
