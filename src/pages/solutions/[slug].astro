@@ -1,0 +1,102 @@
+---
+import { getCollection, render } from "astro:content";
+import MainLayout from "../../layouts/MainLayout.astro";
+
+export async function getStaticPaths() {
+  const solutions = await getCollection("solutions", ({ data }) => !data.draft);
+
+  return solutions.map((solution) => ({
+    params: { slug: solution.id },
+    props: { solution },
+  }));
+}
+
+const { solution } = Astro.props;
+const { Content } = await render(solution);
+const { title, description, image, imageAlt } = solution.data;
+---
+
+<MainLayout title={`${title} | Solutions | Bioprocess Vietnam`} description={description}>
+  <article class="solution-detail">
+    <div class="container container--wide">
+      <nav class="solution-detail__breadcrumb" aria-label="Breadcrumb">
+        <a href="/solutions/">Solutions</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{title}</span>
+      </nav>
+
+      <header class="solution-detail__header">
+        <div class="solution-detail__intro">
+          <p class="solution-detail__eyebrow">BIOPROCESS VIETNAM</p>
+          <h1>{title}</h1>
+          <p class="solution-detail__description">{description}</p>
+        </div>
+        {image && (
+          <img class="solution-detail__image" src={image} alt={imageAlt ?? `${title} solution`} />
+        )}
+      </header>
+
+      <div class="solution-detail__content">
+        <Content />
+      </div>
+    </div>
+  </article>
+</MainLayout>
+
+<style>
+  @layer pages {
+    .solution-detail { padding-block: clamp(2rem, 5vw, 4.5rem); }
+    .solution-detail__breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+      color: var(--color-text-muted);
+      font-size: var(--text-small);
+    }
+    .solution-detail__breadcrumb a { color: var(--color-primary); }
+    .solution-detail__header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 0.9fr);
+      align-items: center;
+      gap: clamp(2rem, 5vw, 4rem);
+      padding-bottom: clamp(2rem, 4vw, 3.5rem);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .solution-detail__eyebrow {
+      margin-bottom: 0.75rem;
+      color: var(--color-primary-400);
+      font-size: var(--text-small);
+      font-weight: var(--font-weight-semibold);
+      letter-spacing: 0.08em;
+    }
+    .solution-detail__intro h1 { margin-bottom: 1rem; }
+    .solution-detail__description {
+      max-width: 62ch;
+      color: var(--color-text-secondary);
+      font-size: clamp(1rem, 1.5vw, 1.125rem);
+    }
+    .solution-detail__image {
+      width: 100%;
+      aspect-ratio: 5 / 3;
+      object-fit: cover;
+      border-radius: var(--radius-lg, 14px);
+    }
+    .solution-detail__content {
+      max-width: 850px;
+      padding-top: clamp(2rem, 4vw, 3.5rem);
+    }
+    .solution-detail__content :global(h2),
+    .solution-detail__content :global(h3) { margin: 1.75rem 0 0.75rem; }
+    .solution-detail__content :global(p),
+    .solution-detail__content :global(ul),
+    .solution-detail__content :global(ol) { margin-bottom: 1rem; }
+    .solution-detail__content :global(ul),
+    .solution-detail__content :global(ol) { padding-left: 1.5rem; }
+    @media (max-width: 700px) {
+      .solution-detail__header { grid-template-columns: 1fr; }
+      .solution-detail__image { grid-row: 1; }
+    }
+  }
+</style>

@@ -1,0 +1,212 @@
+---
+import { getCollection } from "astro:content";
+import MainLayout from "../../layouts/MainLayout.astro";
+
+const solutions = (await getCollection("solutions", ({ data }) => !data.draft))
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder || a.data.title.localeCompare(b.data.title));
+---
+
+<MainLayout
+  title="Solutions | Bioprocess Vietnam"
+  description="Explore bioprocess solutions from Bioprocess Vietnam."
+>
+  <section
+    class:list={["solutions-landing", solutions.length <= 6 && "solutions-landing--viewport"]}
+    aria-labelledby="solutions-title"
+  >
+    <h1 id="solutions-title" class="sr-only">Solutions</h1>
+
+    {solutions.length > 0 ? (
+      <div class="solutions-grid">
+        {solutions.map((solution) => (
+          <a
+            class="solution-card"
+            href={`/solutions/${solution.id}/`}
+            aria-label={`Explore ${solution.data.title} solution`}
+          >
+            {solution.data.image ? (
+              <img
+                class="solution-card__image"
+                src={solution.data.image}
+                alt={solution.data.imageAlt ?? `${solution.data.title} solution`}
+                loading="eager"
+                decoding="async"
+              />
+            ) : (
+              <span class="solution-card__image-fallback" aria-hidden="true"></span>
+            )}
+            <span class="solution-card__overlay" aria-hidden="true"></span>
+            <span class="solution-card__content">
+              <span class="solution-card__title">{solution.data.title}</span>
+              <span class="solution-card__description">{solution.data.description}</span>
+            </span>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <p class="solutions-empty">Solutions will be available soon.</p>
+    )}
+  </section>
+</MainLayout>
+
+<style>
+  @layer pages {
+    .solutions-landing {
+      width: 100%;
+      min-height: calc(100vh - var(--header-height, 76px));
+      padding: clamp(1rem, 2vw, 1.75rem);
+      background: var(--color-background);
+    }
+
+    .solutions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-auto-rows: minmax(220px, auto);
+      gap: clamp(0.75rem, 1.4vw, 1.25rem);
+      width: 100%;
+      max-width: var(--container-wide);
+      min-height: calc(100vh - var(--header-height, 76px) - 2 * clamp(1rem, 2vw, 1.75rem));
+      margin-inline: auto;
+    }
+
+    .solution-card {
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      min-width: 0;
+      min-height: 220px;
+      overflow: hidden;
+      isolation: isolate;
+      color: var(--color-white);
+      background: var(--color-primary-800);
+      border: 1px solid rgb(32 2 145 / 12%);
+      border-radius: 14px;
+      box-shadow: 0 3px 12px rgb(13 0 61 / 8%);
+      text-decoration: none;
+    }
+
+    .solution-card:hover { color: var(--color-white); }
+
+    .solution-card__image,
+    .solution-card__image-fallback {
+      position: absolute;
+      z-index: -2;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .solution-card__image-fallback {
+      background: linear-gradient(135deg, var(--color-primary-700), var(--color-primary-900));
+    }
+
+    .solution-card__image { transition: transform 450ms ease; }
+
+    .solution-card__overlay {
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      background: linear-gradient(180deg, rgb(13 0 61 / 5%) 10%, rgb(13 0 61 / 24%) 48%, rgb(13 0 61 / 86%) 100%);
+    }
+
+    .solution-card__content {
+      display: grid;
+      gap: 0.5rem;
+      width: 100%;
+      padding: clamp(1rem, 2vw, 1.75rem);
+    }
+
+    .solution-card__title {
+      color: var(--color-white);
+      font-size: clamp(1.15rem, 1.8vw, 1.75rem);
+      font-weight: var(--font-weight-semibold);
+      line-height: 1.2;
+      letter-spacing: var(--tracking-tight);
+      text-shadow: 0 1px 8px rgb(13 0 61 / 35%);
+    }
+
+    .solution-card__description {
+      max-width: 42ch;
+      color: var(--color-primary-50);
+      font-size: clamp(0.75rem, 0.9vw, 0.875rem);
+      line-height: 1.45;
+      text-shadow: 0 1px 6px rgb(13 0 61 / 40%);
+    }
+
+    .solution-card:focus-visible {
+      outline: 3px solid var(--color-primary-400);
+      outline-offset: 3px;
+    }
+
+    .solutions-empty {
+      padding: 4rem 1rem;
+      text-align: center;
+      color: var(--color-text-secondary);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .solution-card:hover .solution-card__image { transform: scale(1.045); }
+      .solution-card:hover .solution-card__overlay { background-color: rgb(13 0 61 / 8%); }
+    }
+
+    /* Desktop: fit the complete grid below the sticky header. */
+    @media (min-width: 1025px) {
+      :global(body:has(.solutions-landing--viewport)) {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100vh;
+        height: 100svh;
+        min-height: 0;
+        overflow: hidden;
+      }
+
+      :global(body:has(.solutions-landing--viewport) > .site-header) { flex: 0 0 auto; }
+      :global(body:has(.solutions-landing--viewport) #main-content) {
+        display: flex;
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow: hidden;
+      }
+      :global(body:has(.solutions-landing--viewport) .site-footer) { display: none; }
+
+      .solutions-landing--viewport {
+        display: flex;
+        flex: 1 1 auto;
+        min-height: 0;
+        padding-block: clamp(0.75rem, 1.5vh, 1.25rem);
+      }
+
+      .solutions-landing--viewport .solutions-grid {
+        flex: 1 1 auto;
+        min-height: 0;
+        grid-auto-rows: auto;
+        grid-template-rows: repeat(2, minmax(0, 1fr));
+      }
+
+      .solutions-landing--viewport .solution-card { min-height: 0; }
+    }
+
+    @media (max-width: 1024px) {
+      .solutions-landing { min-height: auto; padding: 1.25rem var(--container-padding); }
+      .solutions-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: auto;
+        min-height: 0;
+      }
+      .solution-card { aspect-ratio: 5 / 3; min-height: 190px; }
+    }
+
+    @media (max-width: 560px) {
+      .solutions-landing { padding: 1rem var(--container-padding); }
+      .solutions-grid { grid-template-columns: 1fr; gap: 0.875rem; }
+      .solution-card { aspect-ratio: 16 / 8; min-height: 150px; }
+      .solution-card__title { font-size: 1.25rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .solution-card__image { transition: none; }
+    }
+  }
+</style>

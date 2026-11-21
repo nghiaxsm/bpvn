@@ -304,6 +304,33 @@ const { brands } = Astro.props;
 
     searchInput?.addEventListener("input", applyFilters);
 
+    // Restore category selections from navigation links in the Products dropdown.
+    const params = new URLSearchParams(window.location.search);
+    const categoryParam = params.get("category") ?? "";
+    const subcategoryParam = params.get("subcategory") ?? "";
+
+    const parentButton = getButtons('[data-filter-toggle="parent"]').find(
+      (button) => button.dataset.filterValue === categoryParam,
+    );
+
+    if (parentButton) {
+      setPressed(parentButton, true);
+      getButtons('[data-filter-all="parent"]').forEach((button) => setPressed(button, false));
+
+      const subcategoryButton = getButtons('[data-filter-toggle="subcategory"]').find(
+        (button) =>
+          button.dataset.filterValue === subcategoryParam &&
+          button.dataset.parentId === categoryParam,
+      );
+
+      if (subcategoryButton) {
+        setPressed(subcategoryButton, true);
+        getButtons('[data-filter-all="subcategory"]')
+          .filter((button) => button.dataset.parentId === categoryParam)
+          .forEach((button) => setPressed(button, false));
+      }
+    }
+
     updateSubcategoryVisibility();
     applyFilters();
   }

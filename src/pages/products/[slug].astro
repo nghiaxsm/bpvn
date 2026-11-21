@@ -1,0 +1,516 @@
+---
+import { getCollection, render } from "astro:content";
+import MainLayout from "../../layouts/MainLayout.astro";
+import ProductCard from "../../components/product/ProductCard.astro";
+import {
+  getProductParentCategoryForSubcategory,
+  getProductSubcategoryById,
+} from "../../data/product-categories";
+
+const brandNames: Record<string, string> = {
+  biolink: "BioLink",
+  lisure: "Lisure",
+};
+
+export async function getStaticPaths() {
+  const products = await getCollection("products");
+
+  return products.map((product) => ({
+    params: { slug: product.id },
+    props: { product },
+  }));
+}
+
+const allProducts = await getCollection("products");
+const { product } = Astro.props;
+const { Content } = await render(product);
+const { title, model, description, brand, categories, image, applications } = product.data;
+const brandLabel = brandNames[brand] ?? brand;
+
+const productCategoryDetails = categories.flatMap((categoryId) => {
+  const subcategory = getProductSubcategoryById(categoryId);
+  const parent = getProductParentCategoryForSubcategory(categoryId);
+
+  return subcategory && parent ? [{ subcategory, parent }] : [];
+});
+
+const relatedProducts = allProducts
+  .filter((candidate) => candidate.id !== product.id)
+  .filter((candidate) =>
+    candidate.data.categories.some((categoryId) => categories.includes(categoryId)),
+  )
+  .sort(
+    (a, b) =>
+      a.data.sortOrder - b.data.sortOrder ||
+      a.data.title.localeCompare(b.data.title),
+  )
+  .slice(0, 4);
+
+const pageTitle = `${title} | ${brandLabel} | Bioprocess Vietnam`;
+const pageDescription = description;
+---
+
+<MainLayout title={pageTitle} description={pageDescription}>
+  <div class="product-detail container">
+    <nav class="product-detail__breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span aria-hidden="true">/</span>
+      <a href="/products/">Products</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">{title}</span>
+    </nav>
+
+    <section class="product-detail__hero" aria-labelledby="product-title">
+      <div class="product-detail__image-wrap">
+        {image ? (
+          <img
+            class="product-detail__image"
+            src={image}
+            alt={title}
+            fetchpriority="high"
+            decoding="async"
+            width="900"
+            height="700"
+          />
+        ) : (
+          <div class="product-detail__image-placeholder">
+            <span>{brandLabel}</span>
+          </div>
+        )}
+      </div>
+
+      <div class="product-detail__summary">
+        <p class="product-detail__eyebrow">PRODUCT</p>
+        <h1 id="product-title">{title}</h1>
+
+        <dl class="product-detail__metadata">
+          <div>
+            <dt>Brand</dt>
+            <dd>{brandLabel}</dd>
+          </div>
+          <div>
+            <dt>Model</dt>
+            <dd>{model}</dd>
+          </div>
+        </dl>
+
+        {productCategoryDetails.length > 0 && (
+          <div class="product-detail__categories">
+            <h2>Categories</h2>
+            {productCategoryDetails.map(({ parent, subcategory }) => (
+              <div class="product-detail__category-group">
+                <span class="product-detail__category-parent">{parent.name}</span>
+                <span class="product-detail__category-child">{subcategory.name}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+
+    <div class="product-detail__content">
+      <section class="product-detail__description" aria-labelledby="product-description-title">
+        <h2 id="product-description-title">Product Description</h2>
+        <p>{description}</p>
+      </section>
+
+      <div class="product-detail__markdown">
+        <Content />
+      </div>
+
+      {applications.length > 0 && (
+        <section class="product-detail__applications" aria-labelledby="product-applications-title">
+          <h2 id="product-applications-title">Applications</h2>
+          <ul>
+            {applications.map((application) => <li>{application}</li>)}
+          </ul>
+        </section>
+      )}
+    </div>
+
+    {relatedProducts.length > 0 && (
+      <section class="product-detail__related" aria-labelledby="related-products-title">
+        <div class="product-detail__section-heading">
+          <div>
+            <p class="product-detail__eyebrow">EXPLORE MORE</p>
+            <h2 id="related-products-title">Related Products</h2>
+          </div>
+          <a href="/products/">View all products</a>
+        </div>
+        <div class="product-detail__related-grid">
+          {relatedProducts.map((relatedProduct) => (
+            <ProductCard product={relatedProduct} />
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+</MainLayout>
+
+<style>
+  .product-detail {
+    padding-block: var(--space-8) var(--space-16);
+  }
+
+  .product-detail__breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-8);
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+  }
+
+  .product-detail__breadcrumb a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+  }
+
+  .product-detail__breadcrumb a:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  .product-detail__breadcrumb [aria-current="page"] {
+    color: var(--color-text);
+  }
+
+  .product-detail .product-detail__hero {
+    display: grid;
+    width: 100%;
+    grid-template-columns: minmax(0, 25%) minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(var(--space-5), 3vw, var(--space-8));
+  }
+
+  .product-detail__image-wrap {
+    display: grid;
+    min-width: 0;
+    aspect-ratio: 1 / 1;
+    place-items: center;
+    overflow: hidden;
+    padding: var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+  }
+
+  .product-detail__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .product-detail__image-placeholder {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    place-items: center;
+    color: var(--color-text-muted);
+  }
+
+  .product-detail__summary {
+    min-width: 0;
+    padding-block: var(--space-2);
+  }
+
+  .product-detail__eyebrow {
+    margin: 0 0 var(--space-2);
+    color: var(--color-primary-light);
+    font-size: var(--text-small);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .product-detail__summary h1 {
+    margin: 0 0 var(--space-6);
+    color: var(--color-text);
+    font-size: var(--text-h1);
+    line-height: var(--line-heading);
+    overflow-wrap: anywhere;
+  }
+
+  .product-detail__metadata {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0 0 var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .product-detail__metadata dt {
+    margin-bottom: var(--space-1);
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+  }
+
+  .product-detail__metadata dd {
+    margin: 0;
+    color: var(--color-text);
+    font-weight: var(--font-weight-semibold);
+    overflow-wrap: anywhere;
+  }
+
+  .product-detail__categories {
+    display: grid;
+    gap: var(--space-3);
+    padding-top: var(--space-6);
+  }
+
+  .product-detail__categories h2 {
+    margin: 0;
+    color: var(--color-text);
+    font-size: var(--text-h4);
+  }
+
+  .product-detail__category-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .product-detail__category-parent,
+  .product-detail__category-child {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-size: var(--text-small);
+    line-height: 1.3;
+  }
+
+  .product-detail__category-parent {
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .product-detail__category-child {
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-text-secondary);
+  }
+
+  .product-detail__content {
+    display: grid;
+    gap: var(--space-10);
+    max-width: 920px;
+    margin: var(--space-12) auto 0;
+  }
+
+  .product-detail__description h2,
+  .product-detail__applications h2,
+  .product-detail__markdown h2,
+  .product-detail__markdown h3 {
+    color: var(--color-text);
+    line-height: var(--line-heading);
+  }
+
+  .product-detail__description h2,
+  .product-detail__applications h2,
+  .product-detail__markdown h2 {
+    margin: 0 0 var(--space-4);
+    font-size: var(--text-h2);
+  }
+
+  .product-detail__description p,
+  .product-detail__markdown p {
+    color: var(--color-text-secondary);
+    line-height: var(--line-body);
+  }
+
+  .product-detail__description p {
+    margin: 0;
+    font-size: 1.05rem;
+  }
+
+  .product-detail__markdown {
+    min-width: 0;
+    color: var(--color-text-secondary);
+    line-height: var(--line-body);
+    overflow-wrap: anywhere;
+  }
+
+  .product-detail__markdown :global(h2) {
+    margin: var(--space-10) 0 var(--space-4);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+    font-size: var(--text-h2);
+  }
+
+  .product-detail__markdown :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .product-detail__markdown :global(h3) {
+    margin: var(--space-8) 0 var(--space-3);
+    font-size: var(--text-h3);
+  }
+
+  .product-detail__markdown :global(h4) {
+    margin: var(--space-6) 0 var(--space-2);
+    color: var(--color-text);
+    font-size: var(--text-h4);
+  }
+
+  .product-detail__markdown :global(p),
+  .product-detail__markdown :global(ul),
+  .product-detail__markdown :global(ol),
+  .product-detail__markdown :global(table),
+  .product-detail__markdown :global(blockquote) {
+    margin-block: var(--space-3);
+  }
+
+  .product-detail__markdown :global(ul),
+  .product-detail__markdown :global(ol),
+  .product-detail__applications ul {
+    padding-left: 1.4rem;
+  }
+
+  .product-detail__markdown :global(li),
+  .product-detail__applications li {
+    margin-block: var(--space-2);
+    padding-left: var(--space-1);
+  }
+
+  .product-detail__markdown :global(strong) {
+    color: var(--color-text);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .product-detail__markdown :global(a) {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  .product-detail__markdown :global(table) {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    font-size: var(--text-small);
+  }
+
+  .product-detail__markdown :global(th),
+  .product-detail__markdown :global(td) {
+    min-width: 8rem;
+    padding: var(--space-3);
+    border: 1px solid var(--color-border);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .product-detail__markdown :global(th) {
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+
+  .product-detail__markdown :global(blockquote) {
+    padding: var(--space-3) var(--space-4);
+    border-left: 3px solid var(--color-primary-light);
+    background: var(--color-surface);
+  }
+
+  .product-detail__applications {
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .product-detail__applications ul {
+    margin: 0;
+    color: var(--color-text-secondary);
+    line-height: var(--line-body);
+  }
+
+  .product-detail__related {
+    margin-top: var(--space-16);
+    padding-top: var(--space-10);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .product-detail__section-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  .product-detail__section-heading h2 {
+    margin: 0;
+    color: var(--color-text);
+    font-size: var(--text-h2);
+  }
+
+  .product-detail__section-heading > a {
+    color: var(--color-primary);
+    font-size: var(--text-small);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .product-detail__section-heading > a:hover {
+    text-decoration: underline;
+  }
+
+  .product-detail__related-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+
+  @media (max-width: 900px) {
+    .product-detail__related-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 700px) {
+    .product-detail__hero {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+
+    .product-detail__image-wrap {
+      width: 100%;
+      max-width: 280px;
+      max-height: 280px;
+      justify-self: start;
+    }
+
+    .product-detail__summary {
+      padding: 0;
+    }
+
+    .product-detail__content {
+      margin-top: var(--space-10);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .product-detail {
+      padding-top: var(--space-5);
+    }
+
+    .product-detail__metadata {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .product-detail__related-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .product-detail__section-heading {
+      align-items: start;
+      flex-direction: column;
+    }
+  }
+</style>

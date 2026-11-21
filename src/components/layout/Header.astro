@@ -2,6 +2,7 @@
 
 ---
 import Button from "../common/Button.astro";
+import { productCategories } from "../../data/product-categories";
 
 const pathname = Astro.url.pathname;
 
@@ -40,13 +41,27 @@ const isActive = (path: string) => {
         Home
       </a>
 
-      <a
-        href="/products"
-        class:list={["header__link", isActive("/products") && "is-active"]}
-        aria-current={isActive("/products") ? "page" : undefined}
-      >
-        Products
-      </a>
+      <div class="header__nav-item header__nav-item--products">
+        <a
+          href="/products"
+          class:list={["header__link", isActive("/products") && "is-active"]}
+          aria-current={isActive("/products") ? "page" : undefined}
+          aria-haspopup="true"
+        >
+          Products
+        </a>
+
+        <div class="products-dropdown" aria-label="Product categories">
+          {productCategories.map((category) => (
+            <a
+              class="products-dropdown__link"
+              href={`/products/?category=${category.id}`}
+            >
+              {category.name}
+            </a>
+          ))}
+        </div>
+      </div>
 
       <a
         href="/brands"
@@ -249,6 +264,70 @@ const isActive = (path: string) => {
   .mobile-menu__toggle:focus-visible {
     outline: 2px solid var(--color-primary-300);
     outline-offset: 4px;
+  }
+
+
+  /* Products category dropdown */
+  .header__nav-item--products {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: var(--header-height);
+  }
+
+  .products-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    z-index: 1100;
+    display: none;
+    flex-direction: column;
+    gap: 0.25rem;
+    width: max-content;
+    min-width: 260px;
+    max-width: min(320px, calc(100vw - 32px));
+    padding: 0.5rem;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg, 12px);
+    box-shadow: var(--shadow-lg);
+    transform: translateX(-50%);
+  }
+
+  .header__nav-item--products:hover .products-dropdown,
+  .header__nav-item--products:focus-within .products-dropdown {
+    display: flex;
+  }
+
+  .products-dropdown__link {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 0.875rem;
+    color: var(--color-text-secondary);
+    font-size: var(--text-small);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.4;
+    border-radius: var(--radius-md);
+    transition:
+      color var(--transition-fast),
+      background-color var(--transition-fast);
+  }
+
+  .products-dropdown__link:hover,
+  .products-dropdown__link:focus-visible {
+    color: var(--color-primary);
+    background: var(--color-primary-soft);
+  }
+
+  .products-dropdown__link:focus-visible {
+    outline: 2px solid var(--color-primary-300);
+    outline-offset: 1px;
+  }
+
+  @media (max-width: 900px) {
+    .products-dropdown {
+      display: none !important;
+    }
   }
 
   /* Desktop CTA */

@@ -58,7 +58,7 @@ export const productCategories: ProductParentCategory[] = [
     sortOrder: 4,
     subcategories: [
       { id: "product-characterization", name: "Product Characterization", parentId: "analytics", sortOrder: 1 },
-      { id: "process-control", name: "Process Control", parentId: "analytics", sortOrder: 2 },
+      { id: "process-monitoring", name: "Process Monitoring", parentId: "analytics", sortOrder: 2 },
     ],
   },
 ];

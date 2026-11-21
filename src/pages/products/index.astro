@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import MainLayout from "../../layouts/MainLayout.astro";
 import ProductFilters from "../../components/product/ProductFilters.astro";
 import ProductGrid from "../../components/product/ProductGrid.astro";
+import SectionHeading from "../../components/common/SectionHeading.astro";
 
 const products = (await getCollection("products"))
   .sort(
@@ -32,12 +33,12 @@ const brands = brandSlugs.map((slug) => ({
 >
   <section class="products-hero">
     <div class="container">
-      <p class="products-hero__eyebrow">BIOPROCESS VIETNAM</p>
-      <h1>Our Products</h1>
-      <p>
-        Bioprocess equipment and technologies for biopharmaceutical research,
-        process development and manufacturing.
-      </p>
+      <SectionHeading
+        eyebrow="BIOPROCESS VIETNAM"
+        title="Our Products"
+        description="Bioprocess equipment and technologies for biopharmaceutical research, process development and manufacturing."
+        level="h1"
+      />
     </div>
   </section>
 
@@ -46,7 +47,10 @@ const brands = brandSlugs.map((slug) => ({
 
     <section class="products-results" aria-label="Product results">
       <div class="products-results__heading">
-        <h2>Product Catalogue</h2>
+        <SectionHeading
+          title="Product Catalogue"
+          level="h2"
+        />
         <p class="products-results__count" data-results-count>
           {products.length} products
         </p>
@@ -70,24 +74,23 @@ const brands = brandSlugs.map((slug) => ({
       color: var(--color-white);
     }
 
-    .products-hero__eyebrow {
-      margin: 0 0 var(--space-2);
-      color: #d9d1ff;
-      font-size: var(--text-caption);
-      font-weight: var(--font-weight-semibold);
-      letter-spacing: var(--tracking-wide);
+    .products-hero :global(.section-heading) {
+      margin-bottom: 0;
     }
 
-    .products-hero h1 {
-      margin: 0;
+    .products-hero :global(.section-heading__eyebrow) {
+      color: #d9d1ff;
+    }
+
+    .products-hero :global(.section-heading__title) {
       color: var(--color-white);
       font-size: clamp(1.75rem, 3vw, 2.25rem);
       line-height: var(--line-tight);
     }
 
-    .products-hero p:last-child {
+    .products-hero :global(.section-heading__description) {
       max-width: 720px;
-      margin: var(--space-2) 0 0;
+      margin-top: var(--space-2);
       color: #f0edff;
       font-size: var(--text-small);
       line-height: var(--line-body);
@@ -110,10 +113,8 @@ const brands = brandSlugs.map((slug) => ({
       margin-bottom: var(--space-5);
     }
 
-    .products-results__heading h2 {
-      margin: 0;
-      color: var(--color-text);
-      font-size: var(--text-h3);
+    .products-results__heading :global(.section-heading) {
+      margin-bottom: 0;
     }
 
     .products-results__heading .products-results__count {

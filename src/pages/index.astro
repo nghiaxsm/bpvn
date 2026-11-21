@@ -1,12 +1,19 @@
 
 ---
+import { getCollection } from "astro:content";
 import Container from "../components/common/Container.astro";
 import Button from "../components/common/Button.astro";
 import Badge from "../components/common/Badge.astro";
 import Card from "../components/common/Card.astro";
 import SectionHeading from "../components/common/SectionHeading.astro";
+import ProductCard from "../components/product/ProductCard.astro";
 
 import MainLayout from "../layouts/MainLayout.astro";
+
+const featuredProducts = (await getCollection("products"))
+  .filter((product) => product.data.featured)
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  .slice(0, 6);
 ---
 
 <MainLayout
@@ -20,7 +27,6 @@ import MainLayout from "../layouts/MainLayout.astro";
         eyebrow="Bioprocess Vietnam"
         title="Building Better Bioprocess Solutions"
         description="Explore our portfolio of advanced bioprocess technologies, products and solutions."
-        align="center"
       />
 
       <div class="demo-buttons">
@@ -35,44 +41,38 @@ import MainLayout from "../layouts/MainLayout.astro";
         </Button>
       </div>
 
-      <div class="demo-badges">
-        <Badge variant="primary">Featured</Badge>
-        <Badge variant="secondary">Biotechnology</Badge>
-        <Badge variant="success">Available</Badge>
-        <Badge variant="accent">New</Badge>
-      </div>
+      <section class="featured-products" aria-labelledby="featured-products-title">
+        <SectionHeading
+          eyebrow="Our Products"
+          title="Featured Products"
+          description="Explore selected products from our bioprocess portfolio."
+        />
 
-      <div class="demo-cards">
-        <Card variant="outlined" hover>
-          <Badge variant="primary">Featured Product</Badge>
-          <h3>Bioprocess Product</h3>
-          <p>
-            High-quality products for advanced bioprocess applications.
+        {featuredProducts.length > 0 ? (
+          <div class="featured-products__grid">
+            {featuredProducts.map((product) => (
+              <ProductCard product={product} />
+            ))}
+          </div>
+        ) : (
+          <p class="featured-products__empty">
+            Featured products will be displayed here soon.
           </p>
-          <Button href="/products" variant="ghost" size="sm">
-            Learn More →
-          </Button>
-        </Card>
+        )}
 
-        <Card variant="elevated" hover>
-          <Badge variant="secondary">Our Solutions</Badge>
-          <h3>Advanced Technologies</h3>
-          <p>
-            Discover innovative technologies for biotechnology research.
-          </p>
-          <Button href="/solutions" variant="ghost" size="sm">
-            Explore →
+        <div class="featured-products__action">
+          <Button href="/products/" variant="outline">
+            View All Products
           </Button>
-        </Card>
-      </div>
+        </div>
+      </section>
 
     </Container>
   </section>
 </MainLayout>
 
 <style>
-  .demo-buttons,
-  .demo-badges {
+  .demo-buttons {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -81,23 +81,41 @@ import MainLayout from "../layouts/MainLayout.astro";
     margin-bottom: 2rem;
   }
 
-  .demo-cards {
+  .featured-products {
+    margin-top: clamp(3rem, 6vw, 5rem);
+  }
+
+  .featured-products__grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+    align-items: stretch;
   }
 
-  .demo-cards h3 {
-    margin-top: 1rem;
-    margin-bottom: 0.75rem;
+  .featured-products__empty {
+    margin: var(--space-8) 0;
+    padding: var(--space-8);
+    border: 1px dashed var(--color-border-strong);
+    border-radius: var(--radius-lg);
+    color: var(--color-text-secondary);
+    text-align: center;
   }
 
-  .demo-cards p {
-    margin-bottom: 1.5rem;
+  .featured-products__action {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--space-8);
   }
 
-  @media (max-width: 600px) {
-    .demo-cards {
+  @media (max-width: 760px) {
+    .featured-products__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-4);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .featured-products__grid {
       grid-template-columns: 1fr;
     }
   }
