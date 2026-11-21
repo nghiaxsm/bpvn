@@ -15,6 +15,9 @@ interface Props {
   dataParentId?: string;
   dataFilterAll?: string;
   dataClearFilters?: boolean;
+  dataHeroPrevious?: boolean;
+  dataHeroNext?: boolean;
+  dataHeroDot?: number;
 }
 
 const {
@@ -33,6 +36,9 @@ const {
   dataParentId,
   dataFilterAll,
   dataClearFilters = false,
+  dataHeroPrevious = false,
+  dataHeroNext = false,
+  dataHeroDot,
 } = Astro.props;
 
 const classes = [
@@ -68,6 +74,9 @@ const classes = [
     data-parent-id={dataParentId}
     data-filter-all={dataFilterAll}
     data-clear-filters={dataClearFilters ? "" : undefined}
+    data-hero-previous={dataHeroPrevious ? "" : undefined}
+    data-hero-next={dataHeroNext ? "" : undefined}
+    data-hero-dot={dataHeroDot}
   >
     <slot name="icon-start" />
     <span class="button__label"><slot /></span>
@@ -82,7 +91,7 @@ const classes = [
       justify-content: center;
       gap: var(--space-2);
       border: 1px solid transparent;
-      border-radius: var(--radius-md);
+      border-radius: 9999px;
       font-family: inherit;
       font-weight: var(--font-weight-semibold);
       line-height: 1.4;
@@ -179,7 +188,7 @@ const classes = [
       min-height: 30px;
       padding: 0.3rem 0.65rem;
       border-color: var(--color-border-strong);
-      border-radius: 6px;
+      border-radius: 9999px;
       background: var(--color-white);
       color: var(--color-text-secondary);
       font-size: 0.75rem;

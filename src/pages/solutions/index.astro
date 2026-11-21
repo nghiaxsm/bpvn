@@ -55,7 +55,8 @@ const solutions = (await getCollection("solutions", ({ data }) => !data.draft))
       width: 100%;
       min-height: calc(100vh - var(--header-height, 76px));
       padding: clamp(1rem, 2vw, 1.75rem);
-      background: var(--color-background);
+      color: var(--color-primary-50);
+      background: var(--color-primary-900);
     }
 
     .solutions-grid {
@@ -142,7 +143,7 @@ const solutions = (await getCollection("solutions", ({ data }) => !data.draft))
     .solutions-empty {
       padding: 4rem 1rem;
       text-align: center;
-      color: var(--color-text-secondary);
+      color: var(--color-primary-200);
     }
 
     @media (hover: hover) and (pointer: fine) {

@@ -4,7 +4,7 @@ model: "CytoLinX® BR"
 description: "A single-use stirred-tank bioreactor platform with nominal vessel sizes from 10 L to 2,000 L for upstream cell culture and process scale-up."
 brand: "biolink"
 categories:
-  - "single-use-bioreactor"
+  - "bioreactors"
 image: "/images/products/biolink-cytolinx-br.webp"
 featured: true
 ---

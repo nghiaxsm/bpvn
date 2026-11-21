@@ -1,0 +1,216 @@
+---
+import Breadcrumb from "../components/common/Breadcrumb.astro";
+import "../styles/global.css";
+
+const levels = [
+  {
+    title: "1 cấp",
+    description: "Chỉ hiển thị trang hiện tại.",
+    items: [{ label: "Products" }],
+  },
+  {
+    title: "2 cấp",
+    description: "Trang cha và trang hiện tại.",
+    items: [
+      { label: "Products", href: "/products/" },
+      { label: "Bioreactors" },
+    ],
+  },
+  {
+    title: "3 cấp",
+    description: "Trang gốc, danh mục và trang hiện tại.",
+    items: [
+      { label: "Home", href: "/" },
+      { label: "Products", href: "/products/" },
+      { label: "Bioreactors" },
+    ],
+  },
+  {
+    title: "4 cấp",
+    description: "Home, trang danh mục, danh mục con và trang hiện tại.",
+    items: [
+      { label: "Home", href: "/" },
+      { label: "Products", href: "/products/" },
+      { label: "Upstream Solution", href: "/products/?category=upstream-solution" },
+      { label: "Single-Use Bioreactor Model X" },
+    ],
+  },
+];
+---
+
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="color-scheme" content="light" />
+    <title>Breadcrumb Component Test | BPVN</title>
+  </head>
+  <body>
+    <main class="breadcrumb-test">
+      <header class="breadcrumb-test__header">
+        <p class="breadcrumb-test__eyebrow">BPVN COMPONENT PREVIEW</p>
+        <h1>Breadcrumb Test</h1>
+        <p>Kiểm tra component Breadcrumb với 1–4 cấp trên cả nền sáng và nền tối.</p>
+      </header>
+
+      <section class="breadcrumb-test__surface breadcrumb-test__surface--light" aria-labelledby="light-heading">
+        <div class="breadcrumb-test__surface-heading">
+          <h2 id="light-heading">Nền sáng</h2>
+          <span>Light background</span>
+        </div>
+        <div class="breadcrumb-test__examples">
+          {levels.map((level) => (
+            <article class="breadcrumb-test__example">
+              <div class="breadcrumb-test__example-copy">
+                <h3>{level.title}</h3>
+                <p>{level.description}</p>
+              </div>
+              <Breadcrumb items={level.items} />
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="breadcrumb-test__surface breadcrumb-test__surface--dark" aria-labelledby="dark-heading">
+        <div class="breadcrumb-test__surface-heading">
+          <h2 id="dark-heading">Nền tối</h2>
+          <span>Dark background</span>
+        </div>
+        <div class="breadcrumb-test__examples">
+          {levels.map((level) => (
+            <article class="breadcrumb-test__example">
+              <div class="breadcrumb-test__example-copy">
+                <h3>{level.title}</h3>
+                <p>{level.description}</p>
+              </div>
+              <Breadcrumb items={level.items} />
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <p class="breadcrumb-test__note">
+        Các cấp trước là liên kết có thể nhấn; mục cuối là trang hiện tại. Nhấn thử các mục để kiểm tra trạng thái hover và focus.
+      </p>
+    </main>
+  </body>
+</html>
+
+<style>
+  @layer pages {
+    .breadcrumb-test {
+      width: min(100% - 2rem, 1120px);
+      margin-inline: auto;
+      padding-block: clamp(2rem, 5vw, 4.5rem);
+    }
+
+    .breadcrumb-test__header {
+      margin-bottom: 2rem;
+    }
+
+    .breadcrumb-test__eyebrow {
+      margin: 0 0 0.5rem;
+      color: var(--color-primary-500);
+      font-size: var(--text-small);
+      font-weight: var(--font-weight-semibold);
+      letter-spacing: 0.08em;
+    }
+
+    .breadcrumb-test__header h1 {
+      margin: 0 0 0.5rem;
+      color: var(--color-text);
+      font-size: clamp(2rem, 4vw, 2.75rem);
+    }
+
+    .breadcrumb-test__header > p:last-child {
+      margin: 0;
+      color: var(--color-text-secondary);
+    }
+
+    .breadcrumb-test__surface {
+      padding: clamp(1.25rem, 3vw, 2rem);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+    }
+
+    .breadcrumb-test__surface + .breadcrumb-test__surface {
+      margin-top: 1.5rem;
+    }
+
+    .breadcrumb-test__surface--light {
+      color: var(--color-text);
+      background: #ffffff;
+    }
+
+    .breadcrumb-test__surface--dark {
+      color: #ffffff;
+      background: var(--color-primary-900);
+      border-color: var(--color-primary-800);
+    }
+
+    .breadcrumb-test__surface-heading {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .breadcrumb-test__surface-heading h2 {
+      margin: 0;
+      font-size: 1.25rem;
+    }
+
+    .breadcrumb-test__surface-heading span {
+      color: inherit;
+      opacity: 0.68;
+      font-size: var(--text-small);
+    }
+
+    .breadcrumb-test__example {
+      display: grid;
+      grid-template-columns: minmax(170px, 0.7fr) minmax(0, 1.8fr);
+      align-items: start;
+      gap: 1rem 2rem;
+      padding-block: 1.25rem 0.25rem;
+      border-top: 1px solid currentColor;
+      border-color: color-mix(in srgb, currentColor 16%, transparent);
+    }
+
+    .breadcrumb-test__example + .breadcrumb-test__example {
+      margin-top: 1rem;
+    }
+
+    .breadcrumb-test__example-copy h3 {
+      margin: 0 0 0.25rem;
+      font-size: 1rem;
+    }
+
+    .breadcrumb-test__example-copy p {
+      margin: 0;
+      color: inherit;
+      opacity: 0.68;
+      font-size: var(--text-small);
+    }
+
+    .breadcrumb-test__example .breadcrumb {
+      margin-bottom: 0;
+    }
+
+    .breadcrumb-test__note {
+      margin: 1.25rem 0 0;
+      color: var(--color-text-secondary);
+      font-size: var(--text-small);
+    }
+
+    @media (max-width: 640px) {
+      .breadcrumb-test__example {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+    }
+  }
+</style>

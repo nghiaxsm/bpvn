@@ -1,0 +1,107 @@
+---
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  {items.map((item, index) => (
+    <span class:list={["breadcrumb__item", index === items.length - 1 && "breadcrumb__item--current"]}>
+      {item.href && index !== items.length - 1 ? (
+        <a class="breadcrumb__pill" href={item.href}>{item.label}</a>
+      ) : (
+        <span class="breadcrumb__pill" aria-current="page">{item.label}</span>
+      )}
+    </span>
+  ))}
+</nav>
+
+<style>
+  @layer components {
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-2);
+      margin-bottom: var(--space-8);
+    }
+
+    .breadcrumb__item {
+      display: inline-flex;
+      min-width: 0;
+    }
+
+    .breadcrumb__pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2rem;
+      max-width: 100%;
+      padding: 0.4rem 0.875rem;
+      overflow-wrap: anywhere;
+      color: #FFFFFF !important;
+      background: var(--color-primary-800);
+      border: 1px solid var(--color-primary-700);
+      border-radius: 9999px !important;
+      font-size: var(--text-small);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.35;
+      text-decoration: none;
+      transition:
+        color var(--transition-fast),
+        background-color var(--transition-fast),
+        border-color var(--transition-fast);
+    }
+
+    .breadcrumb__item:nth-child(2) .breadcrumb__pill {
+      background: var(--color-primary-700);
+      border-color: var(--color-primary-600);
+    }
+
+    .breadcrumb__item:nth-child(3) .breadcrumb__pill {
+      background: var(--color-primary-600);
+      border-color: var(--color-primary-500);
+    }
+
+    .breadcrumb__item:nth-child(n + 4) .breadcrumb__pill {
+      background: var(--color-primary-500);
+      border-color: var(--color-primary-400);
+    }
+
+    .breadcrumb a.breadcrumb__pill:link,
+    .breadcrumb a.breadcrumb__pill:visited,
+    .breadcrumb a.breadcrumb__pill:hover,
+    .breadcrumb a.breadcrumb__pill:active,
+    .breadcrumb .breadcrumb__pill[aria-current="page"] {
+      color: #FFFFFF !important;
+    }
+
+    .breadcrumb__pill[href]:hover {
+      color: #FFFFFF !important;
+      background: var(--color-primary-500);
+      border-color: var(--color-primary-400);
+    }
+
+    .breadcrumb__pill:focus-visible {
+      outline: 2px solid var(--color-primary-300);
+      outline-offset: 3px;
+    }
+
+    .breadcrumb__item--current .breadcrumb__pill {
+      color: #FFFFFF !important;
+      font-weight: var(--font-weight-semibold);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .breadcrumb__pill {
+        transition: none;
+      }
+    }
+  }
+</style>

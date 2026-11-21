@@ -25,7 +25,7 @@ export const productCategories: ProductParentCategory[] = [
     name: "Upstream Solution",
     sortOrder: 1,
     subcategories: [
-      { id: "single-use-bioreactor", name: "Single-Use Bioreactor", parentId: "upstream-solution", sortOrder: 1 },
+      { id: "bioreactors", name: "Bioreactors", parentId: "upstream-solution", sortOrder: 1 },
       { id: "cell-culture-bags", name: "Cell Culture Bags", parentId: "upstream-solution", sortOrder: 2 },
       { id: "cell-culture-media-reagents", name: "Cell Culture Media & Reagents", parentId: "upstream-solution", sortOrder: 3 },
     ],

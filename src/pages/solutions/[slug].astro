@@ -18,8 +18,10 @@ const { title, description, image, imageAlt } = solution.data;
 
 <MainLayout title={`${title} | Solutions | Bioprocess Vietnam`} description={description}>
   <article class="solution-detail">
-    <div class="container container--wide">
+    <div class="container">
       <nav class="solution-detail__breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span aria-hidden="true">/</span>
         <a href="/solutions/">Solutions</a>
         <span aria-hidden="true">/</span>
         <span aria-current="page">{title}</span>
@@ -45,17 +47,29 @@ const { title, description, image, imageAlt } = solution.data;
 
 <style>
   @layer pages {
-    .solution-detail { padding-block: clamp(2rem, 5vw, 4.5rem); }
+    .solution-detail {
+      padding-block: var(--space-8) var(--space-16);
+    }
     .solution-detail__breadcrumb {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 0.65rem;
-      margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+      gap: var(--space-2);
+      margin-bottom: var(--space-8);
       color: var(--color-text-muted);
       font-size: var(--text-small);
     }
-    .solution-detail__breadcrumb a { color: var(--color-primary); }
+    .solution-detail__breadcrumb a {
+      color: var(--color-text-secondary);
+      text-decoration: none;
+    }
+    .solution-detail__breadcrumb a:hover {
+      color: var(--color-primary);
+      text-decoration: underline;
+    }
+    .solution-detail__breadcrumb [aria-current="page"] {
+      color: var(--color-text);
+    }
     .solution-detail__header {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(280px, 0.9fr);

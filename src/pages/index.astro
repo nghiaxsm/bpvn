@@ -1,51 +1,137 @@
-
 ---
 import { getCollection } from "astro:content";
-import Container from "../components/common/Container.astro";
+import MainLayout from "../layouts/MainLayout.astro";
 import Button from "../components/common/Button.astro";
-import Badge from "../components/common/Badge.astro";
-import Card from "../components/common/Card.astro";
 import SectionHeading from "../components/common/SectionHeading.astro";
 import ProductCard from "../components/product/ProductCard.astro";
 
-import MainLayout from "../layouts/MainLayout.astro";
+const solutions = (await getCollection("solutions", ({ data }) => !data.draft)).sort(
+  (a, b) =>
+    a.data.sortOrder - b.data.sortOrder ||
+    a.data.title.localeCompare(b.data.title),
+);
 
 const featuredProducts = (await getCollection("products"))
   .filter((product) => product.data.featured)
-  .sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+  .sort(
+    (a, b) =>
+      a.data.sortOrder - b.data.sortOrder ||
+      a.data.title.localeCompare(b.data.title),
+  )
   .slice(0, 6);
 ---
 
 <MainLayout
-  title="BPVN - Bioprocess Vietnam"
-  description="Advanced bioprocess technologies and solutions."
+  title="Bioprocess Vietnam | Bioprocess Solutions & Products"
+  description="Explore bioprocess solutions and featured products from Bioprocess Vietnam."
 >
-  <section class="section">
-    <Container>
+  <div class="homepage">
+    <!-- Hero Slider: dynamically populated from the Solutions collection. -->
+    <section
+      class="hero-slider"
+      data-hero-slider
+      aria-label="Featured bioprocess solutions"
+      aria-roledescription="carousel"
+    >
+      {solutions.length > 0 ? (
+        <>
+        <div class="hero-slider__slides" aria-live="off">
+          {solutions.map((solution, index) => (
+            <article
+              class:list={[
+                "hero-slide",
+                index === 0 && "is-active",
+              ]}
+              data-hero-slide
+              aria-hidden={index === 0 ? "false" : "true"}
+              aria-roledescription="slide"
+              aria-label={`${index + 1} of ${solutions.length}: ${solution.data.title}`}
+            >
+              {solution.data.image ? (
+                <img
+                  class="hero-slide__image"
+                  src={solution.data.image}
+                  alt={solution.data.imageAlt ?? ""}
+                  loading={index === 0 ? "eager" : "lazy"}
+                  fetchpriority={index === 0 ? "high" : "auto"}
+                  decoding="async"
+                />
+              ) : null}
+              <div class="hero-slide__overlay" aria-hidden="true"></div>
+              <div class="hero-slide__content container container--wide">
+                <p class="hero-slide__eyebrow">BIOPROCESS VIETNAM · SOLUTIONS</p>
+                <h1>{solution.data.title}</h1>
+                <p class="hero-slide__description">{solution.data.description}</p>
+                <Button
+                  href={`/solutions/${solution.id}/`}
+                  variant="outline-light"
+                  size="lg"
+                  class="hero-slide__cta"
+                >
+                  Explore Solution
+                  <span slot="icon-end" aria-hidden="true">→</span>
+                </Button>
+              </div>
+            </article>
+          ))}
+        </div>
 
-      <SectionHeading
-        eyebrow="Bioprocess Vietnam"
-        title="Building Better Bioprocess Solutions"
-        description="Explore our portfolio of advanced bioprocess technologies, products and solutions."
-      />
+        {solutions.length > 1 ? (
+          <div class="hero-slider__controls" aria-label="Slider controls">
+            <Button
+              class="hero-slider__arrow hero-slider__arrow--previous"
+              variant="outline-light"
+              size="sm"
+              dataHeroPrevious
+              aria-label="Previous solution"
+            >
+              <span aria-hidden="true">‹</span>
+            </Button>
+            <div class="hero-slider__dots" aria-label="Choose a solution">
+              {solutions.map((solution, index) => (
+                <Button
+                  class:list={[
+                    "hero-slider__dot",
+                    index === 0 && "is-active",
+                  ]}
+                  variant="outline-light"
+                  size="sm"
+                  dataHeroDot={index}
+                  aria-label={`Show ${solution.data.title}`}
+                  ariaPressed={index === 0}
+                />
+              ))}
+            </div>
+            <Button
+              class="hero-slider__arrow hero-slider__arrow--next"
+              variant="outline-light"
+              size="sm"
+              dataHeroNext
+              aria-label="Next solution"
+            >
+              <span aria-hidden="true">›</span>
+            </Button>
+          </div>
+        ) : null}
+        </>
+      ) : (
+        <div class="hero-slider__empty container container--wide">
+          <p class="hero-slide__eyebrow">BIOPROCESS VIETNAM</p>
+          <h1>Bioprocess Solutions</h1>
+          <p>Our solutions will be introduced here soon.</p>
+          <Button href="/solutions/" variant="outline-light">Explore Solutions</Button>
+        </div>
+      )}
+    </section>
 
-      <div class="demo-buttons">
-        <Button>Contact Us</Button>
-
-        <Button variant="secondary">
-          Explore Solutions
-        </Button>
-
-        <Button variant="outline">
-          View Products
-        </Button>
-      </div>
-
-      <section class="featured-products" aria-labelledby="featured-products-title">
+    <!-- Featured Products: retain the approved homepage section. -->
+    <section class="featured-products section" aria-label="Featured Products">
+      <div class="container container--wide">
         <SectionHeading
           eyebrow="Our Products"
           title="Featured Products"
           description="Explore selected products from our bioprocess portfolio."
+          level="h2"
         />
 
         {featuredProducts.length > 0 ? (
@@ -65,58 +151,450 @@ const featuredProducts = (await getCollection("products"))
             View All Products
           </Button>
         </div>
-      </section>
+      </div>
+    </section>
 
-    </Container>
-  </section>
+    <!-- News placeholder: replace with the News collection in a later step. -->
+    <section class="home-news section section--surface" aria-label="News and Insights">
+      <div class="container container--wide">
+        <SectionHeading
+          eyebrow="Latest Updates"
+          title="News & Insights"
+          description="Updates, insights and announcements from Bioprocess Vietnam."
+          level="h2"
+        />
+        <div class="home-news__placeholder">
+          <p>News and insights will be available here soon.</p>
+        </div>
+      </div>
+    </section>
+  </div>
 </MainLayout>
 
 <style>
-  .demo-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
+  @layer pages {
+    .homepage {
+      min-width: 0;
+    }
 
-  .featured-products {
-    margin-top: clamp(3rem, 6vw, 5rem);
-  }
+    /* HERO SLIDER */
+    .hero-slider {
+      position: relative;
+      height: clamp(360px, 24vw, 420px);
+      min-height: 0;
+      overflow: hidden;
+      isolation: isolate;
+      color: var(--color-white);
+      background: var(--color-primary-900);
+    }
 
-  .featured-products__grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-5);
-    align-items: stretch;
-  }
+    .hero-slider__slides,
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+    }
 
-  .featured-products__empty {
-    margin: var(--space-8) 0;
-    padding: var(--space-8);
-    border: 1px dashed var(--color-border-strong);
-    border-radius: var(--radius-lg);
-    color: var(--color-text-secondary);
-    text-align: center;
-  }
+    .hero-slide {
+      display: flex;
+      align-items: center;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 650ms ease, visibility 650ms ease;
+    }
 
-  .featured-products__action {
-    display: flex;
-    justify-content: center;
-    margin-top: var(--space-8);
-  }
+    .hero-slide.is-active {
+      visibility: visible;
+      opacity: 1;
+    }
 
-  @media (max-width: 760px) {
-    .featured-products__grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    .hero-slide__image {
+      position: absolute;
+      z-index: -2;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transform: scale(1.015);
+      transition: transform 7s ease;
+    }
+
+    .hero-slide.is-active .hero-slide__image {
+      transform: scale(1.07);
+    }
+
+    .hero-slide__overlay {
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        rgb(13 0 61 / 88%) 0%,
+        rgb(18 0 82 / 72%) 43%,
+        rgb(18 0 82 / 22%) 100%
+      );
+    }
+
+    .hero-slide__content {
+      position: relative;
+      z-index: 1;
+      padding-block: 2rem;
+      color: var(--color-white);
+    }
+
+    .hero-slide__eyebrow {
+      margin: 0 0 var(--space-4);
+      color: var(--color-primary-200);
+      font-size: var(--text-small);
+      font-weight: var(--font-weight-semibold);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .hero-slide h1,
+    .hero-slider__empty h1 {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      color: var(--color-white);
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: var(--font-weight-bold);
+      line-height: 1.08;
+      letter-spacing: var(--tracking-tight);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .hero-slide__description {
+      width: 100%;
+      max-width: none;
+      margin: var(--space-5) 0 var(--space-8);
+      color: var(--color-primary-50);
+      font-size: clamp(1rem, 1.5vw, 1.2rem);
+      line-height: 1.65;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .hero-slider__controls {
+      position: absolute;
+      z-index: 3;
+      right: max(var(--container-padding), calc((100vw - var(--container-wide)) / 2));
+      bottom: clamp(1.5rem, 4vw, 3rem);
+      display: flex;
+      align-items: center;
       gap: var(--space-4);
     }
-  }
 
-  @media (max-width: 480px) {
+    :global(.hero-slider__arrow) {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      color: var(--color-white);
+      background: rgb(255 255 255 / 12%);
+      border: 1px solid rgb(255 255 255 / 42%);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background-color var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    :global(.hero-slider__arrow span) {
+      display: block;
+      margin-top: -4px;
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    :global(.hero-slider__arrow:hover) {
+      background: rgb(255 255 255 / 26%);
+      border-color: var(--color-white);
+    }
+
+    :global(.hero-slider__dots) {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    :global(.hero-slider__dot) {
+      width: 9px;
+      height: 9px;
+      padding: 0;
+      background: rgb(255 255 255 / 48%);
+      border: 0;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: width var(--transition-fast), background-color var(--transition-fast);
+    }
+
+
+
+    :global(.hero-slider__arrow.button) {
+      min-height: 42px;
+      padding: 0;
+      border-radius: 50%;
+      flex: 0 0 42px;
+    }
+
+    :global(.hero-slider__dot.button) {
+      display: block;
+      width: 9px;
+      min-width: 9px;
+      min-height: 9px;
+      height: 9px;
+      padding: 0;
+      border: 0;
+      border-radius: 9999px;
+      background: rgb(255 255 255 / 48%);
+      color: transparent;
+      box-shadow: none;
+    }
+
+    :global(.hero-slider__dot .button__label) {
+      display: none;
+    }
+
+    :global(.hero-slider__dot.is-active),
+    :global(.hero-slider__dot[aria-pressed="true"]) {
+      width: 26px;
+      min-width: 26px;
+      background: #FFFFFF !important;
+      border: 1px solid #FFFFFF;
+      border-radius: 9999px;
+    }
+
+    :global(.hero-slider__arrow:focus-visible),
+    :global(.hero-slider__dot:focus-visible) {
+      outline: 2px solid var(--color-white);
+      outline-offset: 4px;
+    }
+
+    .hero-slider__empty {
+      display: flex;
+      min-height: inherit;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding-block: 5rem;
+      color: var(--color-white);
+    }
+
+    .hero-slider__empty > p:not(.hero-slide__eyebrow) {
+      margin: var(--space-5) 0 var(--space-8);
+      color: var(--color-primary-100);
+    }
+
+    /* FEATURED PRODUCTS */
+    .featured-products {
+      background: var(--color-background);
+    }
+
     .featured-products__grid {
-      grid-template-columns: 1fr;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-5);
+      align-items: stretch;
+    }
+
+    .featured-products__empty {
+      margin: var(--space-8) 0;
+      padding: var(--space-8);
+      color: var(--color-text-secondary);
+      text-align: center;
+      border: 1px dashed var(--color-border-strong);
+      border-radius: var(--radius-lg);
+    }
+
+    .featured-products__action {
+      display: flex;
+      justify-content: center;
+      margin-top: var(--space-8);
+    }
+
+    /* NEWS PLACEHOLDER */
+    .home-news__placeholder {
+      display: flex;
+      min-height: 180px;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-8);
+      background: var(--color-white);
+      border: 1px dashed var(--color-border-strong);
+      border-radius: var(--radius-lg);
+    }
+
+    .home-news__placeholder p {
+      margin: 0;
+      color: var(--color-text-muted);
+      text-align: center;
+    }
+
+    @media (max-width: 760px) {
+      .hero-slider {
+        height: 520px;
+        min-height: 520px;
+      }
+
+      .hero-slide__overlay {
+        background: linear-gradient(
+          90deg,
+          rgb(13 0 61 / 88%) 0%,
+          rgb(18 0 82 / 66%) 100%
+        );
+      }
+
+      .hero-slider__controls {
+        right: var(--container-padding);
+        bottom: 1.5rem;
+      }
+
+      .featured-products__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-4);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-slider {
+        height: 500px;
+        min-height: 500px;
+      }
+
+      .hero-slide__content {
+        padding-bottom: 7rem;
+      }
+
+      .hero-slide h1,
+      .hero-slider__empty h1 {
+        font-size: clamp(2.25rem, 11vw, 3.25rem);
+      }
+
+      .featured-products__grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-slide,
+      .hero-slide__image,
+      .hero-slider__arrow,
+      :global(.hero-slider__dot) {
+        transition: none;
+      }
     }
   }
+
+  /* High-contrast CTA override for the dark hero image. */
+  :global(.hero-slide .hero-slide__cta.button--outline-light) {
+    color: var(--color-primary-800);
+    background: #FFFFFF;
+    border: 2px solid #FFFFFF;
+    box-shadow: 0 6px 18px rgb(0 0 0 / 24%);
+    font-weight: var(--font-weight-bold);
+    white-space: nowrap;
+    transition:
+      transform var(--transition-fast),
+      color var(--transition-fast),
+      background-color var(--transition-fast),
+      box-shadow var(--transition-fast);
+  }
+
+  :global(.hero-slide .hero-slide__cta.button--outline-light .button__label) {
+    color: var(--color-primary-800);
+  }
+
+  :global(.hero-slide .hero-slide__cta.button--outline-light:hover) {
+    color: #FFFFFF;
+    background: var(--color-primary-700);
+    border-color: #FFFFFF;
+    box-shadow: 0 8px 22px rgb(0 0 0 / 30%);
+    transform: translateY(-2px);
+  }
+
+  :global(.hero-slide .hero-slide__cta.button--outline-light:hover .button__label) {
+    color: #FFFFFF;
+  }
 </style>
+
+<script>
+  const slider = document.querySelector<HTMLElement>("[data-hero-slider]");
+
+  if (slider) {
+    const slides = Array.from(slider.querySelectorAll<HTMLElement>("[data-hero-slide]"));
+    const dots = Array.from(slider.querySelectorAll<HTMLButtonElement>("[data-hero-dot]"));
+    const previous = slider.querySelector<HTMLButtonElement>("[data-hero-previous]");
+    const next = slider.querySelector<HTMLButtonElement>("[data-hero-next]");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (slides.length > 1) {
+      let activeIndex = 0;
+      let autoplayId: number | undefined;
+
+      const showSlide = (nextIndex: number) => {
+        activeIndex = (nextIndex + slides.length) % slides.length;
+
+        slides.forEach((slide, index) => {
+          const isActive = index === activeIndex;
+          slide.classList.toggle("is-active", isActive);
+          slide.setAttribute("aria-hidden", String(!isActive));
+        });
+
+        dots.forEach((dot, index) => {
+          const isActive = index === activeIndex;
+          dot.classList.toggle("is-active", isActive);
+          dot.setAttribute("aria-pressed", String(isActive));
+          if (isActive) dot.setAttribute("aria-current", "true");
+          else dot.removeAttribute("aria-current");
+        });
+      };
+
+      const stopAutoplay = () => {
+        if (autoplayId !== undefined) window.clearInterval(autoplayId);
+        autoplayId = undefined;
+      };
+
+      const startAutoplay = () => {
+        stopAutoplay();
+        if (!reducedMotion && !document.hidden) {
+          autoplayId = window.setInterval(() => showSlide(activeIndex + 1), 6500);
+        }
+      };
+
+      previous?.addEventListener("click", () => {
+        showSlide(activeIndex - 1);
+        startAutoplay();
+      });
+
+      next?.addEventListener("click", () => {
+        showSlide(activeIndex + 1);
+        startAutoplay();
+      });
+
+      dots.forEach((dot) => {
+        dot.addEventListener("click", () => {
+          showSlide(Number(dot.dataset.heroDot));
+          startAutoplay();
+        });
+      });
+
+      slider.addEventListener("mouseenter", stopAutoplay);
+      slider.addEventListener("mouseleave", startAutoplay);
+      slider.addEventListener("focusin", stopAutoplay);
+      slider.addEventListener("focusout", (event) => {
+        if (!slider.contains(event.relatedTarget as Node | null)) startAutoplay();
+      });
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) stopAutoplay();
+        else startAutoplay();
+      });
+
+      startAutoplay();
+    }
+  }
+</script>
