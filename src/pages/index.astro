@@ -205,6 +205,7 @@ const featuredProducts = (await getCollection("products"))
     .hero-slide.is-active {
       visibility: visible;
       opacity: 1;
+      animation: hero-slide-fade-in 650ms ease both;
     }
 
     .hero-slide__image {
@@ -221,6 +222,27 @@ const featuredProducts = (await getCollection("products"))
 
     .hero-slide.is-active .hero-slide__image {
       transform: scale(1.07);
+      animation: hero-image-zoom 7s ease both;
+    }
+
+    @keyframes hero-slide-fade-in {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes hero-image-zoom {
+      from {
+        transform: scale(1.015);
+      }
+
+      to {
+        transform: scale(1.07);
+      }
     }
 
     .hero-slide__overlay {
@@ -486,6 +508,7 @@ const featuredProducts = (await getCollection("products"))
       .hero-slider__arrow,
       :global(.hero-slider__dot) {
         transition: none;
+        animation: none !important;
       }
     }
   }

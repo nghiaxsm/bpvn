@@ -126,34 +126,39 @@ const { brands } = Astro.props;
 </section>
 
 <script>
-  const root = document.querySelector<HTMLElement>("[data-product-filters]");
+  const root = document.querySelector("[data-product-filters]");
 
   if (root) {
-    const searchInput = root.querySelector<HTMLInputElement>("[data-product-search]");
-    const cards = Array.from(
-      document.querySelectorAll<HTMLElement>("[data-product-card]"),
-    );
-    const count = document.querySelector<HTMLElement>("[data-results-count]");
-    const activeFilters = root.querySelector<HTMLElement>("[data-active-filters]");
-    const noResults = document.querySelector<HTMLElement>("[data-no-results]");
-    const subcategoryContainer = root.querySelector<HTMLElement>("[data-subcategory-filter-group]");
+    const searchInput = root.querySelector("[data-product-search]");
+    const cards = Array.from(document.querySelectorAll("[data-product-card]"));
+    const count = document.querySelector("[data-results-count]");
+    const activeFilters = root.querySelector("[data-active-filters]");
+    const noResults = document.querySelector("[data-no-results]");
+    const subcategoryContainer = root.querySelector("[data-subcategory-filter-group]");
+    const pagination = document.querySelector("[data-product-pagination]");
+    const pageNumbers = pagination?.querySelector("[data-page-numbers]");
+    const previousButton = pagination?.querySelector("[data-page-previous]");
+    const nextButton = pagination?.querySelector("[data-page-next]");
+    const pageSize = 12;
+    let currentPage = 1;
+    let matchedCards = [];
 
-    const getButtons = (selector: string) =>
-      Array.from(root.querySelectorAll<HTMLButtonElement>(selector));
+    const getButtons = (selector) =>
+      Array.from(root.querySelectorAll(selector));
 
-    const getSelectedButton = (type: string) =>
+    const getSelectedButton = (type) =>
       getButtons(`[data-filter-toggle="${type}"]`).find(
         (button) => button.getAttribute("aria-pressed") === "true",
       );
 
-    const getSelectedValue = (type: string) =>
+    const getSelectedValue = (type) =>
       getSelectedButton(type)?.dataset.filterValue ?? "";
 
-    const setPressed = (button: HTMLButtonElement, pressed: boolean) => {
+    const setPressed = (button, pressed) => {
       button.setAttribute("aria-pressed", String(pressed));
     };
 
-    const clearLevel = (type: string, parentId?: string) => {
+    const clearLevel = (type, parentId) => {
       getButtons(`[data-filter-toggle="${type}"]`)
         .filter((button) => !parentId || button.dataset.parentId === parentId)
         .forEach((button) => setPressed(button, false));
@@ -170,42 +175,121 @@ const { brands } = Astro.props;
         subcategoryContainer.hidden = !selectedParent;
       }
 
-      root.querySelectorAll<HTMLElement>("[data-subcategory-group]").forEach((group) => {
-        const isActiveGroup = Boolean(selectedParent) &&
-          group.dataset.subcategoryGroup === selectedParent;
-        group.hidden = !isActiveGroup;
+      root.querySelectorAll("[data-subcategory-group]").forEach((group) => {
+        group.hidden = !selectedParent ||
+          group.dataset.subcategoryGroup !== selectedParent;
       });
 
-      if (!selectedParent) {
-        clearLevel("subcategory");
-      }
+      if (!selectedParent) clearLevel("subcategory");
     };
 
-    const applyFilters = () => {
+    const updateUrl = (method = "pushState") => {
+      const params = new URLSearchParams(window.location.search);
+      ["category", "subcategory", "brand", "q", "page"].forEach((key) => params.delete(key));
+
+      const category = getSelectedValue("parent");
+      const subcategory = getSelectedValue("subcategory");
+      const brand = getSelectedValue("brand");
+      const query = searchInput?.value.trim() ?? "";
+
+      if (category) params.set("category", category);
+      if (subcategory) params.set("subcategory", subcategory);
+      if (brand) params.set("brand", brand);
+      if (query) params.set("q", query);
+      if (currentPage > 1) params.set("page", String(currentPage));
+
+      const queryString = params.toString();
+      const nextUrl = `${window.location.pathname}${queryString ? `?${queryString}` : ""}${window.location.hash}`;
+      window.history[method]({}, "", nextUrl);
+    };
+
+    const createPageButton = (page, isCurrent = false) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "product-pagination__button";
+      button.textContent = String(page);
+      button.dataset.page = String(page);
+
+      if (isCurrent) {
+        button.setAttribute("aria-current", "page");
+        button.setAttribute("aria-label", `Page ${page}, current page`);
+      } else {
+        button.setAttribute("aria-label", `Go to page ${page}`);
+      }
+      return button;
+    };
+
+    const renderPagination = (pageCount) => {
+      if (!pagination || !pageNumbers || !previousButton || !nextButton) return;
+
+      pagination.hidden = pageCount <= 1;
+      pageNumbers.replaceChildren();
+
+      if (pageCount <= 1) return;
+
+      previousButton.disabled = currentPage <= 1;
+      nextButton.disabled = currentPage >= pageCount;
+
+      const visiblePages = new Set([1, pageCount]);
+      for (
+        let page = Math.max(1, currentPage - 2);
+        page <= Math.min(pageCount, currentPage + 2);
+        page += 1
+      ) {
+        visiblePages.add(page);
+      }
+
+      const sortedPages = Array.from(visiblePages).sort((a, b) => a - b);
+      let previousPage = 0;
+
+      sortedPages.forEach((page) => {
+        if (previousPage && page - previousPage > 1) {
+          const ellipsis = document.createElement("span");
+          ellipsis.className = "product-pagination__ellipsis";
+          ellipsis.textContent = "…";
+          ellipsis.setAttribute("aria-hidden", "true");
+          pageNumbers.append(ellipsis);
+        }
+
+        pageNumbers.append(createPageButton(page, page === currentPage));
+        previousPage = page;
+      });
+    };
+
+    const renderCurrentPage = () => {
+      const pageCount = Math.max(1, Math.ceil(matchedCards.length / pageSize));
+      currentPage = Math.min(Math.max(1, currentPage), pageCount);
+
+      const start = (currentPage - 1) * pageSize;
+      const end = start + pageSize;
+
+      cards.forEach((card) => {
+        card.hidden = true;
+      });
+
+      matchedCards.slice(start, end).forEach((card) => {
+        card.hidden = false;
+      });
+
+      renderPagination(pageCount);
+    };
+
+    const applyFilters = ({ resetPage = false, updateHistory = null } = {}) => {
       const searchTerm = searchInput?.value.trim().toLocaleLowerCase() ?? "";
       const selectedParent = getSelectedValue("parent");
       const selectedSubcategory = getSelectedValue("subcategory");
       const selectedBrand = getSelectedValue("brand");
 
-      // Build the parent -> subcategory mapping from rendered controls.
-      // Frontmatter variables are not directly available inside a client-side script.
       const activeSubcategoryGroup = selectedParent
-        ? root.querySelector<HTMLElement>(
-            `[data-subcategory-group="${CSS.escape(selectedParent)}"]`,
-          )
+        ? root.querySelector(`[data-subcategory-group="${CSS.escape(selectedParent)}"]`)
         : null;
 
       const parentSubcategoryIds = activeSubcategoryGroup
-        ? Array.from(
-            activeSubcategoryGroup.querySelectorAll<HTMLButtonElement>(
-              '[data-filter-toggle="subcategory"]',
-            ),
-          ).map((button) => button.dataset.filterValue ?? "")
+        ? Array.from(activeSubcategoryGroup.querySelectorAll('[data-filter-toggle="subcategory"]'))
+            .map((button) => button.dataset.filterValue ?? "")
         : [];
 
-      let visibleCount = 0;
-
-      cards.forEach((card) => {
+      matchedCards = cards.filter((card) => {
         const cardCategories = (card.dataset.categories ?? "")
           .split("|")
           .map((value) => value.trim())
@@ -214,22 +298,19 @@ const { brands } = Astro.props;
         const searchableText = (card.dataset.search ?? "").toLocaleLowerCase();
 
         const matchesSearch = !searchTerm || searchableText.includes(searchTerm);
-        const matchesParent =
-          !selectedParent ||
+        const matchesParent = !selectedParent ||
           cardCategories.some((categoryId) => parentSubcategoryIds.includes(categoryId));
-        const matchesSubcategory =
-          !selectedSubcategory || cardCategories.includes(selectedSubcategory);
+        const matchesSubcategory = !selectedSubcategory ||
+          cardCategories.includes(selectedSubcategory);
         const matchesBrand = !selectedBrand || selectedBrand === cardBrand;
 
-        const isVisible =
-          matchesSearch && matchesParent && matchesSubcategory && matchesBrand;
-
-        card.hidden = !isVisible;
-        if (isVisible) visibleCount += 1;
+        return matchesSearch && matchesParent && matchesSubcategory && matchesBrand;
       });
 
-      if (count) count.textContent = `${visibleCount} products`;
-      if (noResults) noResults.hidden = visibleCount !== 0;
+      if (resetPage) currentPage = 1;
+
+      if (count) count.textContent = `${matchedCards.length} products`;
+      if (noResults) noResults.hidden = matchedCards.length !== 0;
 
       const activeCount = [
         selectedParent,
@@ -243,32 +324,79 @@ const { brands } = Astro.props;
           ? `${activeCount} filters selected`
           : "All products";
       }
+
+      renderCurrentPage();
+      if (updateHistory) updateUrl(updateHistory);
     };
 
-    // Event delegation ensures all filter buttons, including dynamically rendered
-    // subcategory groups, use the same selection logic.
+    const restoreFromUrl = () => {
+      const params = new URLSearchParams(window.location.search);
+      const categoryParam = params.get("category") ?? "";
+      const subcategoryParam = params.get("subcategory") ?? "";
+      const brandParam = params.get("brand") ?? "";
+
+      clearLevel("parent");
+      clearLevel("subcategory");
+      clearLevel("brand");
+
+      if (searchInput) searchInput.value = params.get("q") ?? "";
+
+      const parentButton = getButtons('[data-filter-toggle="parent"]')
+        .find((button) => button.dataset.filterValue === categoryParam);
+
+      if (parentButton) {
+        setPressed(parentButton, true);
+        getButtons('[data-filter-all="parent"]').forEach((button) => setPressed(button, false));
+      }
+
+      updateSubcategoryVisibility();
+
+      const subcategoryButton = categoryParam
+        ? getButtons('[data-filter-toggle="subcategory"]').find(
+            (button) =>
+              button.dataset.filterValue === subcategoryParam &&
+              button.dataset.parentId === categoryParam,
+          )
+        : null;
+
+      if (subcategoryButton) {
+        setPressed(subcategoryButton, true);
+        getButtons('[data-filter-all="subcategory"]')
+          .filter((button) => button.dataset.parentId === categoryParam)
+          .forEach((button) => setPressed(button, false));
+      }
+
+      const brandButton = getButtons('[data-filter-toggle="brand"]')
+        .find((button) => button.dataset.filterValue === brandParam);
+
+      if (brandButton) {
+        setPressed(brandButton, true);
+        getButtons('[data-filter-all="brand"]').forEach((button) => setPressed(button, false));
+      }
+
+      const requestedPage = Number.parseInt(params.get("page") ?? "1", 10);
+      currentPage = Number.isFinite(requestedPage) && requestedPage > 0 ? requestedPage : 1;
+    };
+
     root.addEventListener("click", (event) => {
       const target = event.target;
       if (!(target instanceof Element)) return;
 
-      const toggleButton = target.closest<HTMLButtonElement>("[data-filter-toggle]");
-      const allButton = target.closest<HTMLButtonElement>("[data-filter-all]");
-      const clearButton = target.closest<HTMLButtonElement>("[data-clear-filters]");
+      const toggleButton = target.closest("[data-filter-toggle]");
+      const allButton = target.closest("[data-filter-all]");
+      const clearButton = target.closest("[data-clear-filters]");
 
       if (toggleButton && root.contains(toggleButton)) {
         const type = toggleButton.dataset.filterToggle ?? "";
         const wasSelected = toggleButton.getAttribute("aria-pressed") === "true";
         const parentId = toggleButton.dataset.parentId;
 
-        // Only one option can be active within each filter level.
         clearLevel(type, type === "subcategory" ? parentId : undefined);
 
         if (!wasSelected) {
           setPressed(toggleButton, true);
           getButtons(`[data-filter-all="${type}"]`)
-            .filter((button) =>
-              type !== "subcategory" || button.dataset.parentId === parentId,
-            )
+            .filter((button) => type !== "subcategory" || button.dataset.parentId === parentId)
             .forEach((button) => setPressed(button, false));
         }
 
@@ -277,7 +405,7 @@ const { brands } = Astro.props;
           updateSubcategoryVisibility();
         }
 
-        applyFilters();
+        applyFilters({ resetPage: true, updateHistory: "pushState" });
         return;
       }
 
@@ -292,7 +420,7 @@ const { brands } = Astro.props;
           updateSubcategoryVisibility();
         }
 
-        applyFilters();
+        applyFilters({ resetPage: true, updateHistory: "pushState" });
         return;
       }
 
@@ -302,39 +430,43 @@ const { brands } = Astro.props;
         clearLevel("subcategory");
         clearLevel("brand");
         updateSubcategoryVisibility();
-        applyFilters();
+        applyFilters({ resetPage: true, updateHistory: "pushState" });
       }
     });
 
-    searchInput?.addEventListener("input", applyFilters);
+    searchInput?.addEventListener("input", () => {
+      applyFilters({ resetPage: true, updateHistory: "replaceState" });
+    });
 
-    // Restore category selections from navigation links in the Products dropdown.
-    const params = new URLSearchParams(window.location.search);
-    const categoryParam = params.get("category") ?? "";
-    const subcategoryParam = params.get("subcategory") ?? "";
+    pagination?.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
 
-    const parentButton = getButtons('[data-filter-toggle="parent"]').find(
-      (button) => button.dataset.filterValue === categoryParam,
-    );
-
-    if (parentButton) {
-      setPressed(parentButton, true);
-      getButtons('[data-filter-all="parent"]').forEach((button) => setPressed(button, false));
-
-      const subcategoryButton = getButtons('[data-filter-toggle="subcategory"]').find(
-        (button) =>
-          button.dataset.filterValue === subcategoryParam &&
-          button.dataset.parentId === categoryParam,
-      );
-
-      if (subcategoryButton) {
-        setPressed(subcategoryButton, true);
-        getButtons('[data-filter-all="subcategory"]')
-          .filter((button) => button.dataset.parentId === categoryParam)
-          .forEach((button) => setPressed(button, false));
+      const pageButton = target.closest("[data-page]");
+      if (pageButton) {
+        currentPage = Number.parseInt(pageButton.dataset.page ?? "1", 10);
+      } else if (target.closest("[data-page-previous]")) {
+        currentPage -= 1;
+      } else if (target.closest("[data-page-next]")) {
+        currentPage += 1;
+      } else {
+        return;
       }
-    }
 
+      applyFilters({ updateHistory: "pushState" });
+      document.querySelector("[data-product-grid]")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    });
+
+    window.addEventListener("popstate", () => {
+      restoreFromUrl();
+      updateSubcategoryVisibility();
+      applyFilters();
+    });
+
+    restoreFromUrl();
     updateSubcategoryVisibility();
     applyFilters();
   }
