@@ -15,100 +15,104 @@ const { brands } = Astro.props;
 ---
 
 <section class="product-filters" aria-label="Product filters" data-product-filters>
-  <div class="product-filters__search">
-    <label class="product-filters__label" for="product-search">Search products</label>
-    <input
-      id="product-search"
-      type="search"
-      placeholder="Search products..."
-      autocomplete="off"
-      data-product-search
-    />
-  </div>
+  <div class="product-filters__top-row">
+    <div class="product-filters__search">
+      <label class="product-filters__label" for="product-search">Search</label>
+      <input
+        id="product-search"
+        type="search"
+        placeholder="Search products..."
+        autocomplete="off"
+        data-product-search
+      />
+    </div>
 
-  <div class="product-filters__group" aria-label="Main categories">
-    <h3 class="product-filters__heading">Main Category</h3>
-    <div class="product-filters__options">
-      <Button
-        variant="filter"
-        size="sm"
-        class="product-filter-all"
-        ariaPressed={true}
-        dataFilterAll="parent"
-      >
-        All
-      </Button>
-      {productCategories.map((category) => (
+    <div class="product-filters__group product-filters__group--main" aria-label="Main categories">
+      <h3 class="product-filters__heading">Categories</h3>
+      <div class="product-filters__options">
         <Button
           variant="filter"
           size="sm"
-          class="product-filter-toggle"
-          ariaPressed={false}
-          dataFilterToggle="parent"
-          dataFilterValue={category.id}
+          class="product-filter-all"
+          ariaPressed={true}
+          dataFilterAll="parent"
         >
-          {category.name}
+          All
         </Button>
-      ))}
-    </div>
-  </div>
-
-  <div class="product-filters__group" aria-label="Subcategories" data-subcategory-filter-group hidden>
-    <h3 class="product-filters__heading">Subcategory</h3>
-    {productCategories.map((category) => (
-      <div class="filter-category-group" data-subcategory-group={category.id} hidden>
-        <div class="product-filters__options">
+        {productCategories.map((category) => (
           <Button
             variant="filter"
             size="sm"
-            class="product-filter-all"
-            ariaPressed={true}
-            dataFilterAll="subcategory"
-            dataParentId={category.id}
+            class="product-filter-toggle"
+            ariaPressed={false}
+            dataFilterToggle="parent"
+            dataFilterValue={category.id}
           >
-            All
+            {category.name}
           </Button>
-          {category.subcategories.map((subcategory) => (
-            <Button
-              variant="filter"
-              size="sm"
-              class="product-filter-toggle"
-              ariaPressed={false}
-              dataFilterToggle="subcategory"
-              dataFilterValue={subcategory.id}
-              dataParentId={category.id}
-            >
-              {subcategory.name}
-            </Button>
-          ))}
-        </div>
+        ))}
       </div>
-    ))}
-  </div>
+    </div>
 
-  <div class="product-filters__group" aria-label="Brands">
-    <h3 class="product-filters__heading">Brands</h3>
-    <div class="product-filters__options">
-      <Button
-        variant="filter"
-        size="sm"
-        class="product-filter-all"
-        ariaPressed={true}
-        dataFilterAll="brand"
-      >
-        All
-      </Button>
-      {brands.map((brand) => (
+    <div class="product-filters__group product-filters__group--brands" aria-label="Brands">
+      <h3 class="product-filters__heading">Brand</h3>
+      <div class="product-filters__options">
         <Button
           variant="filter"
           size="sm"
-          class="product-filter-toggle"
-          ariaPressed={false}
-          dataFilterToggle="brand"
-          dataFilterValue={brand.value}
+          class="product-filter-all"
+          ariaPressed={true}
+          dataFilterAll="brand"
         >
-          {brand.label}
+          All
         </Button>
+        {brands.map((brand) => (
+          <Button
+            variant="filter"
+            size="sm"
+            class="product-filter-toggle"
+            ariaPressed={false}
+            dataFilterToggle="brand"
+            dataFilterValue={brand.value}
+          >
+            {brand.label}
+          </Button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <div class="product-filters__subcategory-row" data-subcategory-filter-group hidden>
+    <div class="product-filters__group product-filters__group--subcategory" aria-label="Subcategories">
+      <h3 class="product-filters__heading">Sub-category</h3>
+      {productCategories.map((category) => (
+        <div class="filter-category-group" data-subcategory-group={category.id} hidden>
+          <div class="product-filters__options">
+            <Button
+              variant="filter"
+              size="sm"
+              class="product-filter-all"
+              ariaPressed={true}
+              dataFilterAll="subcategory"
+              dataParentId={category.id}
+            >
+              All
+            </Button>
+            {category.subcategories.map((subcategory) => (
+              <Button
+                variant="filter"
+                size="sm"
+                class="product-filter-toggle"
+                ariaPressed={false}
+                dataFilterToggle="subcategory"
+                dataFilterValue={subcategory.id}
+                dataParentId={category.id}
+              >
+                {subcategory.name}
+              </Button>
+            ))}
+          </div>
+        </div>
       ))}
     </div>
   </div>
@@ -339,16 +343,25 @@ const { brands } = Astro.props;
 <style>
   .product-filters {
     display: grid;
-    gap: 12px;
-    padding: 14px 16px;
+    gap: 8px;
+    padding: 10px 12px;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg, 12px);
     background: var(--color-white);
   }
 
-  .product-filters__search {
+  .product-filters__top-row {
     display: grid;
-    max-width: 360px;
+    grid-template-columns: minmax(190px, 0.85fr) minmax(360px, 2fr) minmax(170px, 0.9fr);
+    align-items: start;
+    gap: 12px;
+  }
+
+  .product-filters__search,
+  .product-filters__group {
+    display: grid;
+    min-width: 0;
+    align-content: start;
     gap: 5px;
   }
 
@@ -358,34 +371,40 @@ const { brands } = Astro.props;
     margin: 0;
     padding: 0;
     color: var(--color-text);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: var(--font-weight-semibold);
-    line-height: 1.3;
-    letter-spacing: 0.025em;
+    line-height: 1.25;
+    letter-spacing: 0.02em;
   }
 
   .product-filters__search input {
     box-sizing: border-box;
     width: 100%;
-    min-height: 36px;
-    padding: 7px 10px;
+    min-height: 30px;
+    padding: 5px 9px;
     border: 1px solid var(--color-border-strong);
     border-radius: var(--radius-md, 8px);
     background: var(--color-white);
     color: var(--color-text);
     font: inherit;
-    font-size: 13px;
-  }
-
-  .product-filters__group {
-    display: grid;
-    gap: 7px;
+    font-size: 12px;
   }
 
   .product-filters__options {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .product-filters__subcategory-row {
+    display: grid;
+    padding-top: 7px;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .product-filters__group--subcategory {
+    gap: 5px;
   }
 
   .filter-category-group {
@@ -394,17 +413,17 @@ const { brands } = Astro.props;
 
   .product-filters__footer {
     display: flex;
-    min-height: 30px;
+    min-height: 24px;
     align-items: center;
     flex-wrap: wrap;
-    gap: 10px;
-    padding-top: 8px;
+    gap: 8px;
+    padding-top: 5px;
     border-top: 1px solid var(--color-border);
   }
 
   .product-filters__active {
     color: var(--color-text-muted);
-    font-size: 11px;
+    font-size: 10px;
   }
 
   .product-filters__clear {
@@ -415,14 +434,29 @@ const { brands } = Astro.props;
     display: none !important;
   }
 
-  @media (max-width: 640px) {
-    .product-filters {
-      gap: 11px;
-      padding: 12px;
+  @media (max-width: 980px) {
+    .product-filters__top-row {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     }
 
     .product-filters__search {
-      max-width: none;
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .product-filters {
+      gap: 9px;
+      padding: 10px;
+    }
+
+    .product-filters__top-row {
+      grid-template-columns: 1fr;
+      gap: 9px;
+    }
+
+    .product-filters__search {
+      grid-column: auto;
     }
   }
 </style>

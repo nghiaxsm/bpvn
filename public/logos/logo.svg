@@ -15,14 +15,14 @@
             <path d="M1240.157,1299.213L826.772,1299.213L826.772,708.661L1240.157,708.661C1337.938,708.661 1417.323,788.047 1417.323,885.827C1417.323,931.184 1400.241,972.584 1372.165,1003.937C1400.241,1035.29 1417.323,1076.69 1417.323,1122.047C1417.323,1219.827 1337.938,1299.213 1240.157,1299.213ZM1240.157,1062.992L944.882,1062.992L944.882,1181.102L1240.157,1181.102C1272.751,1181.102 1299.213,1154.641 1299.213,1122.047C1299.213,1089.454 1272.751,1062.992 1240.157,1062.992ZM1240.157,826.772L944.882,826.772L944.882,944.882L1240.157,944.882C1272.751,944.882 1299.213,918.42 1299.213,885.827C1299.213,853.233 1272.751,826.772 1240.157,826.772Z" style="fill:rgb(32,2,145);"/>
         </g>
     </g>
-    <g transform="matrix(0.838538,0,0,0.838538,333.940717,104.891707)">
-        <text x="1535.433px" y="545.686px" style="font-family:'NotoSans-Black', 'Noto Sans', sans-serif;font-weight:900;font-size:536.648px;fill:rgb(32,2,145);">BIOPROCESS</text>
+    <g transform="matrix(1.074004,0,0,1.074004,-15.950204,-30.76442)">
+        <text x="1535.433px" y="545.686px" style="font-family:'Impact', sans-serif;font-stretch:condensed;font-size:504.343px;fill:rgb(32,2,145);">BIOPROCESS</text>
     </g>
-    <g transform="matrix(1,0,0,1,121.31857,-100.822008)">
-        <text x="1535.433px" y="1122.047px" style="font-family:'NotoSans-Black', 'Noto Sans', sans-serif;font-weight:900;font-size:450px;fill:rgb(218,37,29);">VIETNAM</text>
+    <g transform="matrix(1,0,0,1,121.31857,0.837032)">
+        <text x="1535.433px" y="1122.047px" style="font-family:'Impact', sans-serif;font-stretch:condensed;font-size:541.667px;fill:rgb(218,37,29);">VI<tspan style="letter-spacing:-7.14px">E</tspan><tspan style="letter-spacing:7.14px">T</tspan>NAM</text>
     </g>
-    <path d="M1535.433,118.11L1535.433,1417.323" style="fill:none;stroke:rgb(15,118,110);stroke-width:41.67px;"/>
-    <g transform="matrix(0.512612,0,0,0.512612,805.9179,570.684959)">
-        <text x="1653.543px" y="1417.323px" style="font-family:'NotoSansExtraCondensed-Bold', 'Noto Sans ExtraCondensed', sans-serif;font-weight:700;font-stretch:extra-condensed;font-size:388.52px;fill:rgb(15,118,110);stroke:rgb(216,243,240);stroke-width:1.95px;stroke-miterlimit:2;">A<tspan style="letter-spacing:-0.39px">D</tspan><tspan style="letter-spacing:-1.55px">V</tspan>ANCING BIOPROCESS SO<tspan style="letter-spacing:-2.33px">L</tspan>UTIONS</text>
+    <path d="M1535.433,118.11L1535.433,1417.323" style="fill:none;stroke:rgb(81,74,99);stroke-width:41.67px;"/>
+    <g transform="matrix(0.512612,0,0,0.512612,807.084854,687.480428)">
+        <text x="1653.543px" y="1417.323px" style="font-family:'Impact', sans-serif;font-stretch:condensed;font-size:388.52px;fill:rgb(81,74,99);stroke:rgb(216,243,240);stroke-width:1.95px;stroke-miterlimit:2;">AD<tspan style="letter-spacing:-5.12px">V</tspan><tspan style="letter-spacing:5.12px">A</tspan>NCING BIOPROCESS SOLUTIONS</text>
     </g>
 </svg>
